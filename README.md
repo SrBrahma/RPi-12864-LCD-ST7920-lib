@@ -12,3 +12,5 @@ The problem is, that it is czech.
 
 
 This repository is an open source project to translate it, and to improve it.
+
+The credits for the original code goes to the author. Thanks, czech guy!
