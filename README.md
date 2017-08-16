@@ -6,6 +6,8 @@ An english translation and improvement from this original czech code: http://www
 >(Wayback Machine: https://web.archive.org/web/20160323175419/http://www.astromik.org/raspi/42.htm)
 
 ![alt text](http://www.astromik.org/raspi/glcd12864-zw-a.jpg)
+>(Image displayed on original website)
+
 
 I searched a lot on internet and I couldn't find a single code for my 128x64 LCD display (I was only finding OLED ones), until I found this czech site, with a working code for my LCD.
 
