@@ -11,8 +11,63 @@
 #
 # Most of the translation is crappy. It is based on Google Translator.
 # There is still missing some words that I can't find anywhere, maybe typos from author.
+# 
+# Czech words between "-- --" are words that I was unable to translate.
+# There are few czech words followed by --[possible english translation]--
+#
+# Translated "od" to "fromPoint" instead of "from", as "from" is a python keyword.
+# Unknow terms:
+#
+# - mikrorow (microrow? but why that name)
+# - supery (y pos?)
+# -
+# -
 #
 # - = - = - = - = - = - = - = - = - = - = - = - = - = -
+
+
+
+# Init()
+#   Basic GPIO port settings - just run it once at the beginning of the program
+#
+# InitTextMode()
+#   Switches the display to text mode (display contents can not be displayed)
+#
+# InitGraphicMode()
+#   Switches display to graphic mode (display contents can not be displayed)
+#
+# ClearText()
+#   Deletes the content of the text part of the display (the graphics portion remains unchanged)
+#
+# ClearGraphic(pattern)
+#   Fills the entire contents of the graphical part of the display by the byte.
+#   (When 0x00 is deleted, 0xFF will fill it with white dots, other values ​​will fill the display
+#   with different vertical lines). The text part of the display remains unchanged.
+#
+# ClearDisplay()
+#   Performs both previous deletions at the same time. After returning the display is switched to text mode.
+#
+# DefineIcon(iconId, iconData)
+#   Defines one of four custom icons
+#   iconId = icon identifier number 0 to 3
+#   iconData = a variable that contains an array: 16x double-byte value
+#
+# PrintIcon(iconId, x, y)
+#   The [x, y] coordinates print one of the four custom icons.
+#   iconId = Icon identifier number 0 to 3
+#   x = column 0 to 7
+#   y = line 0 to 3
+#
+# ==== Graphic font 8x8 pixels
+# Character(code, x, supers, inversion)
+#   Displays one character with the ASCII code "code" at the "x" (0 to 15) coordinates,
+#   "Supers" (0 to 63) - the top of the character is "supers" on the microline.
+#   When "inverse" = True, a dark character appears on a light background.
+#
+# 
+
+
+
 
 
 # Last edit: 15.7.2013
@@ -90,10 +145,10 @@ cz2[196] = 196      # pronounced A
 cz2[214] = 214      # pronounced O
 cz2[220] = 220      # pronounced U
 
-cz2[176] = 176      # stupen
+cz2[176] = 176      # degree
 cz2[177] = 177      # plus minus
-cz2[171] = 171      # dvojsipka vlevo
-cz2[166] = 166      # prerusene svislitko
+cz2[171] = 171      # Double arrow on the left
+cz2[166] = 166      # Interrupted vertically
 cz2[223] = 223      # beta
 
 # Assign GPIO pin
@@ -104,7 +159,7 @@ reset_pin = 25      # (pin 22 = GPIO25)  = RESET
 mapa={}             # Memory to store the current status of the displayed pixels on the display
 txtmapa={}          # Memory to which the current text status on the display is saved
 font2={}            # The memory in which the font is stored is retrieved from the external file
-iconData={}          # The variable through which the graphical Icons will be defined
+iconData={}         # The variable through which the graphical Icons will be defined
 
 
 #==============================================================
@@ -113,9 +168,9 @@ iconData={}          # The variable through which the graphical Icons will be de
 
 def main():
 
-  init()              # Basic HW system setup - port directions on the expander and reset the display
-  ClearDisplay(0)         # Complete deletion of the display
-  nacist_font2("/home/pi/font2.txt")  # Retrieve an external font from the file
+  Init()              # Basic HW system setup - port directions on the expander and reset the display
+  ClearDisplay(0)     # Complete deletion of the display
+  nacist_font2("./font2.txt")  # Retrieve an external font from the file
 
 
 
@@ -134,22 +189,22 @@ def main():
 
   time.sleep(2)
   PrintBigString("chr(1)...chr(32)", 0 , 1)
-  char_code = 0
+  charCode = 0
   for r in range(2,4):
     for s in range (16):
-      char_code = char_code + 1
-      PrintCharGreat(char_code , s , r)   # Character display in text mode according to its (ASCII) code
+      charCode = charCode + 1
+      PrintCharGreat(charCode , s , r)   # Character display in text mode according to its (ASCII) code
   time.sleep(3)
   
   PrintBigString("chr(33)..chr(64)" , 0 , 1)
   for r in range(2,4):
     for s in range (16):
-      char_code = char_code + 1
-      PrintCharGreat(char_code , s , r)
+      charCode = charCode + 1
+      PrintCharGreat(charCode , s , r)
      
 
   time.sleep(3)
-  ClearText()               # smazani textove casti displeje
+  ClearText()               # Delete the text part of the display
   time.sleep(1)
 
 #- - - - - - - - - Icons - - - - - - - - - - - - - - - - - - - -  
@@ -157,7 +212,7 @@ def main():
  
  
   # Definition of a zig-zag form of 4 own icons:
-   # First User-Defined Icon (Focus Crisis)
+  # First User-Defined Icon (Focus Crisis)
   iconData[0]  =  0b0011111111111100
   iconData[1]  =  0b0111111111111110
   iconData[2]  =  0b1110000110000111
@@ -246,17 +301,17 @@ def main():
     icon = random.randint(0,3) * 2 # The last parameter is the double-pin number Icons
     Send2Bytes( 1 ,  0 , icon)    
 
-  PrintIcon(3 , 0 , 3)    # icon c.4 na zacatek spodni radky 
-  for icon in range (7):  # cely zbytek te radky se zaplni ikonou c.4
-    # kdyz se tiskne vic ikon za sebe, tak se nemusi u kazde nastavovat pozice
+  PrintIcon(3 , 0 , 3)    # Icon c.4 at the bottom of the bottom row
+  for icon in range (7):  # The rest of the lines are filled with c.4
+    # When you print the icons for yourself, you do not have to set positions for each
     Send2Bytes( 1 ,  0 , 6)    # (6 = icon c.4)    
 
 
 
   time.sleep(2)
-  PrintBigString(" zmena definice ", 0 , 0)
+  PrintBigString(" Change of definition ", 0 , 0)
   time.sleep(2)
-  PrintBigString("  ctvrte Icons  ", 0 , 0)
+  PrintBigString(" Fourth Icons ", 0 , 0)
   time.sleep(2)
 
   
@@ -284,18 +339,18 @@ def main():
   ClearText()
   
 #- - - - - - - - -Cinske charactery - - - - - - - - - - - - - - - -  
-  PrintBigString("   Jako Icons   " , 0 , 0)
-  PrintBigString("  se zobrazuji  " , 0 , 1)
-  PrintBigString(" i cinske charactery " , 0 , 2)
+  PrintBigString("   Like Icons   " , 0 , 0)
+  PrintBigString("  Are displayed  " , 0 , 1)
+  PrintBigString(" And Czech characters " , 0 , 2)
   time.sleep(3)
   ClearText()
 
-  # tisk CINSTINY obrim fontem 16x16 bodu (v textovem mode)
-  # Tohle jsou jen nahodne vybrane charactery (cinstina mi nic nerika)
-  # character je vybran pomoci poslednich dvou cisel funkce "Send2Bytes()"
-  # prvni z tech dvou cisel musi byt vyssi, nez 127
+  # Print CINSTINY --["nothing"?]-- with 16x16 point font (in text mode)
+  # These are just randomly chosen charters (nothing to me --nerika--)
+  # Character is selected with the help of the last two functions "Send2Bytes()"
+  # The first of these two numbers must be higher than 127
 
-  SetIconPos(2,0)                       # nastaveni pozice prvniho characteru [0,0] az [7,3]
+  SetIconPos(2,0)                       # Setting the first character position [0,0] to [7,3]
   Send2Bytes( 1 , 200 , 150)   
   Send2Bytes( 1 , 218 , 10)
   Send2Bytes( 1 , 128 , 1)
@@ -306,14 +361,14 @@ def main():
   Send2Bytes( 1 , 240 , 33)
   Send2Bytes( 1 , 240 , 222)
 
-  # svisly ctyrcharacterovy napis
-  SetIconPos(0,0)                       # nastaveni pozice characteru 
+  # Vertical four-letter writing
+  SetIconPos(0,0)                       # Character position setting
   Send2Bytes( 1 , 128 , 18)   
-  SetIconPos(0,1)                       # nastaveni pozice characteru 
+  SetIconPos(0,1)                       # Character position setting 
   Send2Bytes( 1 , 154 , 251)
-  SetIconPos(0,2)                       # nastaveni pozice characteru 
+  SetIconPos(0,2)                       # Character position setting 
   Send2Bytes( 1 , 197 , 37)
-  SetIconPos(0,3)                       # nastaveni pozice characteru 
+  SetIconPos(0,3)                       # Character position setting 
   Send2Bytes( 1 , 141 , 90)
 
 
@@ -325,28 +380,28 @@ def main():
 # Print 8x8 dot font (in graphic mode)
 
   InitGraphicMode()
-  slovo("Displej je y" , 0 ,  0 , False)  # normalni graficky napis na horni radku
-  slovo("provozovat"       , 3 , 15 , False)        
-  slovo("i v grafickem"    , 1 , 30 , False) 
+  slovo("The display is y" , 0 ,  0 , False)  # Normal graphic on the top row
+  slovo("operate"       , 3 , 15 , False)        
+  slovo("also in graphics"    , 1 , 30 , False) 
   slovo("mode"           , 5 , 45 , False)  
 
   time.sleep(2)
-  slovo("grafickem"        , 5 , 30 , True)  # inverzne prepsany text  
+  slovo("graphics"        , 5 , 30 , True)  # inverzne prepsany text  
 
   time.sleep(3)
   ClearGraphic()    # smazani graficke casti displeje
 
 
-  # ve stejnem mode je y tisknout jednotlive charactery podle jejich kodu
+  # In the same mode, y print individual characters according to their code
   for kod in range(32,128):
     column = (kod-32) % 16
-    row = int((kod-32)/16) * 11        # rozestupy mezi rowmi jsou 11 bodu
-    if (row / 22.0 == int(row/22)):  # kazda druha row je inverzni
+    row = int((kod-32)/16) * 11        # The spacing between the lines is 11 points
+    if (row / 22.0 == int(row/22)):  # Every other row is inverse
       inverze = True
     else:
       inverze = False
       
-    character(kod , column, row , inverze) # podprogram pro tisk characteru v grafickem mode 
+    PrintIcon(kod , column, row , inverze) # Character subroutine in graphics mode
 
   time.sleep(2)
   ClearGraphic()
@@ -360,33 +415,33 @@ def main():
   ClearGraphic()
 
 
-#- - - - - - - tisk bodu a car - - - - - - - - - - - - - - - - - -  
+#- - - - - - - Point printing and car - - - - - - - - - - - - - - - - - -  
 
-  slovo(" V tomto mode " ,0, 2,False)  # normalni napis 2 pixely od horniho okraje
-  slovo("je y kreslit" ,0,11,False)        
-  slovo("  body a line   " ,0,20,False) 
+  slovo("In this mode" ,0, 2,False)  # Normal writing 2 pixels from the top edge
+  slovo("Is y to draw" ,0,11,False)        
+  slovo("  Points and line   " ,0,20,False) 
 
-  # oramovani displeje plnou carou
-  h_line (  0 ,  0 , 127 , 1)          # horizontalni line na libovolne pozici
+  # Oramovani --[Window?]-- display with full car
+  h_line (  0 ,  0 , 127 , 1)          # Horizontal line at any position
   h_line2( 63 ,  0 ,   7 , 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
-  v_line (  0 ,  0 ,  63 , 0b11111111) # vertikalni line v libovolne pozici s nastavenim masky
+  v_line (  0 ,  0 ,  63 , 0b11111111) # Vertical line in any position with mask setting
   v_line (127 ,  0 ,  63 , 0b11111111)
 
-  # vnitrni mensi obdelnik carkovanou carou
+  # Internal small rectangle with a carcass
   h_line2(  31 ,  1 ,   6 , 0b11001100)
   h_line2( 56 ,   1 ,   6 , 0b11001100)
   v_line ( 16 ,  31 ,  56 , 0b11001100)
   v_line (111 ,  31 ,  56 , 0b11001100)
 
 
-  # nahodne nasypani bodu do maleho obdelniku v inverznim mode
+  # Randomly popping a point into a small rectangle in inverse mode
   for i in range(2000):
     x= int(random.randint(17,110))
     y= int(random.randint(32,55))
-    plot( x , y , 2)   # tisk inverzniho bodu na souradnice [x,y]
+    plot( x , y , 2)   # Print an inverse point at the coordinates [x, y]
 
 
-#- - - - - - - - - - - - ruzne styly horizontalnich car - - - - - - - - - - - - - - - - -  
+#- - - - - - - - - - - - Different styles of --horizontalnich-- cars - - - - - - - - - - - - - - - - -  
   ClearGraphic()
 
   h_line2(  0 ,  2 ,   5 , 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
@@ -410,8 +465,8 @@ def main():
     y = int(((math.cos(circle/1000.0) * 20.0)) + 32)
     plot(x,y,0)
 
-  # vykresleni peti kruznic s vyuzitim zapisu do pameti
-  #    a nasledneho presypani cele pameti na displej  (rychle)
+  # Draw five of the circles using the memo
+  # And then swipe the memory to the display (fast)
   for circle in range(0,6283,4):
     x = int(((math.sin(circle/1000.0) * 30.0)) + 96)
     y = int(((math.cos(circle/1000.0) * 30.0)) + 32)
@@ -429,7 +484,7 @@ def main():
     y = int(((math.cos(circle/1000.0) * 10.0)) + 32)
     mem_plot(x,y,0)
 
-  MemDump()    # presypani dat z pameti na displej
+  MemDump()    # Spraying data from memory to display
 
 
 
@@ -438,7 +493,7 @@ def main():
 
 #- - - - - - - - - - Overwrite text and graphic mode - - - - - - - - - -  
 
-  slovo("    Graficky    " , 0 ,  0 , False)
+  slovo("    Graphic    " , 0 ,  0 , False)
   slovo("a  textovy rezim" , 0 , 10 , False) 
   slovo("je  y pouzit" , 0 , 20 , False) 
   slovo("     zaroven    " , 0 , 30 , False) 
@@ -491,7 +546,7 @@ def main():
   slovo(" Smazani  textu " , 0 , 56 , True)   
   time.sleep(1)
 
-  ClearText()                # textovy displej je y take smazat samostatne
+  ClearText()                # The display will be deleted separately
   InitGraphicMode()
   MemDump()                # graphic se ale v tom pripade musi obnovit z pameti
   
@@ -531,13 +586,13 @@ def main():
 # One of the 4 defined 16 x 16 pixel icons at position [x, y]
 # X is in the range 0 to 7
 # Y ranges from 0 to 3
-def PrintIcon(number , x , y):
+def PrintIcon(iconId, x, y):
   shift = x
-  if (y == 1) : shift = shift + 16
-  if (y == 2) : shift = shift + 8
-  if (y == 3) : shift = shift + 24
-  SendByte( 0, 0b10000000 + shift)  # Address Counter to the required position
-  Send2Bytes( 1 ,  0 , number * 2)
+  if (y == 1): shift = shift + 16
+  if (y == 2): shift = shift + 8
+  if (y == 3): shift = shift + 24
+  SendByte(0, 0b10000000 + shift)  # Address Counter to the required position
+  Send2Bytes( 1 ,  0 , iconId * 2)
 
 
 
@@ -547,38 +602,38 @@ def PrintIcon(number , x , y):
 
 def character(kod , zn_x , supery , inverze=False):  
 
-  # kontrola svtupnich parametru a jejich pripadne prenastaveni na krajni meze
-  if (kod    <  32) : kod = 32
-  if (kod    > 255) : kod = 255
-  if (zn_x   <   0) : zn_x = 0  
-  if (zn_x   >  15) : zn_x = 15  
-  if (supery >  63) : supery = 63
-  if (supery <   0) : supery = 0
+  # Control of lightning parameters and their possible override at the limit
+  if (kod    <  32): kod = 32
+  if (kod    > 255): kod = 255
+  if (zn_x   <   0): zn_x = 0  
+  if (zn_x   >  15): zn_x = 15  
+  if (supery >  63): supery = 63
+  if (supery <   0): supery = 0
 
-  kod = kod - 32     # v souboru s fontem je jako prvni character definovana mezera s kodem 32
+  kod = kod - 32     # In the font file, the space with the 32 code is defined as the first character
   superx = zn_x * 8
 
-  # obraz characteru z fontu se bude postupne prenaset na displej byte po byteu v 8 krocich (zhora dolu) 
+  # The font of the character from the font will be gradually transferred to the byte byte display in 8 steps (top down)
   for adr_font in range(kod*8,(kod*8)+8):
 
-    # vypocet horizontalni a vertikalni adresy v pameti displeje
+    # Calculate the horizontal and vertical addresses in the display memory
     horiz = int(superx / 16)  
     dis_adr_y = supery
     if (dis_adr_y >= 32):
       dis_adr_y = dis_adr_y - 32
       horiz = horiz + 8
   
-    minibit = superx % 16     # poloha bitu, se kterym se bude pracovat, v dvojbyteu
+    minibit = superx % 16     # The position of the bit to work with, in the double-bin
    
     Send2Bytes( 0, 0b10000000 + dis_adr_y , 0b10000000 + horiz )  # Setting the graphics address
   
-    orignal_leva  = mapa[horiz,dis_adr_y,0]  # zjisteni aktualniho stavu dvojbyteu na displeji
+    orignal_leva  = mapa[horiz,dis_adr_y,0]  # To find out the current status of the two-byte on the display
     orignal_prava = mapa[horiz,dis_adr_y,1]
 
-    if(minibit < 8):  # kdyz je minibit < 8, meni se jen left byte z dvojbyteu 
-      if (inverze == False):  # normalni text (prepise vsechno, co je pod textem)
+    if(minibit < 8):  # When the minibit is <8, change only the left byte from the double byte
+      if (inverze == False):  # Normal text (write everything that is below the text)
         leftByte = font2[adr_font]
-      if (inverze == True):   # inverzni text (prepise vsechno, co je pod textem)
+      if (inverze == True):   # Inverse text (write everything that is below the text)
         leftByte = ~font2[adr_font]
         
       rightByte = orignal_prava   # right byte z dvojbyteu bude beze zmeny
@@ -601,17 +656,17 @@ def character(kod , zn_x , supery , inverze=False):
 
 #==============================================================
 # Draw a horizontal line point by point
-def h_line(supery, od=0 , do=127, style=1):  
-  for x in range(od, do+1):
+def h_line(supery, fromPixel=0 , do=127, style=1):  
+  for x in range(fromPixel, do+1):
     plot(x,supery,style)
 
 
 
 #==============================================================
-# nakresleni vertikalni line s vyuzitim bitove masky
-def v_line(superx, od=0 , do=63, pattern = 255):  
+# Draw a vertical line using bit masks
+def v_line(superx, fromPixel=0 , do=63, pattern = 255):  
   poz_pat = 0                              # pozice bitu v patternu
-  for y in range(od , do+1 ):
+  for y in range(fromPixel , toPixel+1 ):
     maska = (0b10000000 >> (poz_pat % 8))  # podle zadaneho patternu vybira jednotlive bity
     bitpat= pattern & maska
     if (bitpat == 0):                      # ktere na displeji bud zobrazi, nebo smaze
@@ -686,23 +741,24 @@ def plot(superx , supery , style=1):
   orignal_prava = mapa[horiz,supery,1]
 
   if (minibit < 8):
-      if (style == 1):  # Draw a point
-        leftByte = (0b10000000 >> minibit) | orignal_leva
-      if (style == 0):  # Delete point
-        leftByte = ~(0b10000000 >> minibit) & orignal_leva
-      if (style == 2):  # Delete point
-        leftByte = (0b10000000 >> minibit) ^ orignal_leva
+    if (style == 1):  # Draw a point
+      leftByte = (0b10000000 >> minibit) | orignal_leva
+    if (style == 0):  # Delete point
+      leftByte = ~(0b10000000 >> minibit) & orignal_leva
+    if (style == 2):  # Delete point
+      leftByte = (0b10000000 >> minibit) ^ orignal_leva
 
-      rightByte = orignal_prava
+    rightByte = orignal_prava
+    
   else:
-      if (style == 1):  # Draw a point
-        rightByte = (0b10000000 >> (minibit-8)) | orignal_prava
-      if (style == 0):  # Delete point
-        rightByte = ~(0b10000000 >> (minibit-8)) & orignal_prava
-      if (style == 2):  # Delete point
-        rightByte = (0b10000000 >> (minibit-8)) ^ orignal_prava
+    if (style == 1):  # Draw a point
+      rightByte = (0b10000000 >> (minibit-8)) | orignal_prava
+    if (style == 0):  # Delete point
+      rightByte = ~(0b10000000 >> (minibit-8)) & orignal_prava
+    if (style == 2):  # Delete point
+      rightByte = (0b10000000 >> (minibit-8)) ^ orignal_prava
 
-      leftByte = orignal_leva
+    leftByte = orignal_leva
 
   Send2Bytes( 1, leftByte, rightByte)
   mapa[horiz,supery,0] = leftByte
@@ -856,11 +912,11 @@ def MemDump():
        
 
 #==============================================================
-# smazani graficke casi displeje
+# Delete graphical display time
 def ClearGraphic(pattern = 0): 
 
   InitGraphicMode()
-  SendByte( 0, 0b00110110)  # function set (extend instr.set)
+  SendByte( 0, 0b00110110)  # function set (extend instruction set)
   SendByte( 0, 0b00110100)  # function set (graphic OFF) - aby nebylo videt postupne mazani displeje
   SendByte( 0, 0b00001000)  # displ.=OFF , cursor=OFF , blink=OFF
   
@@ -880,10 +936,10 @@ def ClearGraphic(pattern = 0):
 #==============================================================
 # Delete the text part of the display
 def ClearText(): 
-  SendByte( 0, 0b00110000)  # function set (8 bit)
-  SendByte( 0, 0b00110000)  # function set (basic instruction set)
-  SendByte( 0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
-  SendByte( 0, 0b00000001)  # clear
+  SendByte(0, 0b00110000)  # function set (8 bit)
+  SendByte(0, 0b00110000)  # function set (basic instruction set)
+  SendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
+  SendByte(0, 0b00000001)  # clear
 
   # Erase the text memo
   txtmapa[0] = "                "
@@ -908,7 +964,7 @@ def InitGraphicMode():
   SendByte(0, 0b00110010)  # function set (8 bit)
   SendByte(0, 0b00110110)  # function set (extend instruction set)
   SendByte(0, 0b00110110)  # function set (graphic ON)
-  SendByte(0, 0b00000010)  # enable CGRAM po prenastaveni do BASIC instr.set
+  SendByte(0, 0b00000010)  # nable CGRAM after being reset to BASIC instruction set
 
 
 
@@ -929,9 +985,9 @@ def InitTextMode():
 # Definition of a graphical shape of 4 icons with the size of 16x16 points
 # Icon = Number Icons 0 to 3
 # iconData = 16-byte double-byte value
-def DefineIcon(icon, iconData):
+def DefineIcon(iconId, iconData):
   InitTextMode()
-  SendByte(0, 64 + (icon * 16) )  # Setting the graphics address
+  SendByte(0, 64 + (iconId * 16) )  # Setting the graphics address
   for dat in range(16):
     leftByte  = iconData[dat] / 256
     rightByte = iconData[dat] % 256
@@ -1033,7 +1089,7 @@ def Send2Bytes(  rs,  byte1, byte2):
     serd(bit)
     QuickPulse()
 
-  serd(0)                         # Last separating sequence 4x "0"
+  serd(0)                        # Last separating sequence 4x "0"
   for i in range (4):
     QuickPulse()
 
@@ -1077,18 +1133,18 @@ def SendByte(  rs,  byte):
 
 #==============================================================
 # HW initial setting + reset the display
-def init():
+def Init():
   GPIO.setwarnings(False)
   GPIO.setmode(GPIO.BCM)
   GPIO.setup(sdata_pin, GPIO.OUT)    # (pin 26 = GPIO7)   = DATA
   GPIO.setup(sclk_pin, GPIO.OUT)     # (pin 24 = GPIO8)   = CLOCK
   GPIO.setup(reset_pin, GPIO.OUT)    # (pin 22 = GPIO25)  = RESET
 
-  GPIO.output(sdata_pin, False)      # DATA do "0"
-  GPIO.output(sclk_pin, False)       # CLOCK do "0"
-  GPIO.output(reset_pin, False)      # RESET do "0"
+  GPIO.output(sdata_pin, False)      # DATA to "0"
+  GPIO.output(sclk_pin, False)       # CLOCK to "0"
+  GPIO.output(reset_pin, False)      # RESET to "0"
   time.sleep(0.1)   
-  GPIO.output(reset_pin, True)       # RESET do "1"
+  GPIO.output(reset_pin, True)       # RESET to "1"
 
 
 #==============================================================

@@ -142,7 +142,7 @@ def main():
   velky_napis("vlastni ikony" , 0 , 0)
  
  
-  # definice zrafickÃ© podoby 4 vlastnich ikon:
+  # definice zrafické podoby 4 vlastnich ikon:
   # prvni uzivatelsky definovana ikona (zamerovaci kriz)
   ikodata[0]  =  0b0011111111111100
   ikodata[1]  =  0b0111111111111110
@@ -269,7 +269,7 @@ def main():
   time.sleep(3)
   clr_text()
   
-#- - - - - - - - -CinskÃ© znaky - - - - - - - - - - - - - - - -  
+#- - - - - - - - -Cinské znaky - - - - - - - - - - - - - - - -  
   velky_napis("   Jako ikony   " , 0 , 0)
   velky_napis("  se zobrazuji  " , 0 , 1)
   velky_napis(" i cinske znaky " , 0 , 2)
@@ -311,13 +311,13 @@ def main():
 #tisk napisu fontem 8x8 bodu (v grafickem rezimu)
 
   init_grafika()
-  slovo("Displej je moÅ¾nÃ©" , 0 ,  0 , False)  # normalni graficky napis na horni radku
+  slovo("Displej je možné" , 0 ,  0 , False)  # normalni graficky napis na horni radku
   slovo("provozovat"       , 3 , 15 , False)        
-  slovo("i v grafickÃ©m"    , 1 , 30 , False) 
-  slovo("reÅ¾imu"           , 5 , 45 , False)  
+  slovo("i v grafickém"    , 1 , 30 , False) 
+  slovo("režimu"           , 5 , 45 , False)  
 
   time.sleep(2)
-  slovo("grafickÃ©m"        , 5 , 30 , True)  # inverzne prepsany text  
+  slovo("grafickém"        , 5 , 30 , True)  # inverzne prepsany text  
 
   time.sleep(3)
   clr_grafika()    # smazani graficke casti displeje
@@ -348,9 +348,9 @@ def main():
 
 #- - - - - - - tisk bodu a car - - - - - - - - - - - - - - - - - -  
 
-  slovo(" V tomto reÅ¾imu " ,0, 2,False)  # normalni napis 2 pixely od horniho okraje
-  slovo("je moÅ¾nÃ© kreslit" ,0,11,False)        
-  slovo("  body a ÄÃ¡ry   " ,0,20,False) 
+  slovo(" V tomto režimu " ,0, 2,False)  # normalni napis 2 pixely od horniho okraje
+  slovo("je možné kreslit" ,0,11,False)        
+  slovo("  body a čáry   " ,0,20,False) 
 
   # oramovani displeje plnou carou
   h_cara (  0 ,  0 , 127 , 1)          # horizontalni cara na libovolne pozici
@@ -424,10 +424,10 @@ def main():
 
 #- - - - - - - - - - prepinani textoveho a grafickeho rezimu - - - - - - - - - -  
 
-  slovo("    GrafickÃ½    " , 0 ,  0 , False)
-  slovo("a  textovÃ½ reÅ¾im" , 0 , 10 , False) 
-  slovo("je  moÅ¾nÃ© pouÅ¾Ã­t" , 0 , 20 , False) 
-  slovo("     zÃ¡roveÅˆ    " , 0 , 30 , False) 
+  slovo("    Grafický    " , 0 ,  0 , False)
+  slovo("a  textový režim" , 0 , 10 , False) 
+  slovo("je  možné použít" , 0 , 20 , False) 
+  slovo("     zároveň    " , 0 , 30 , False) 
 
   time.sleep(2)
   clr_grafika()
@@ -444,7 +444,7 @@ def main():
 
   init_grafika()  # prepnuti displeje do grafickeho rezimu
   h_cara2( 53 ,  0 ,   7 , 0b10011001) 
-  slovo("GrafickÃ¡ Å™Ã¡dka" , 1 , 56 , False)   
+  slovo("Grafická řádka" , 1 , 56 , False)   
 
 
   
@@ -458,14 +458,14 @@ def main():
     plot(x,(x/2) + 3 , 1)
 
   time.sleep(2)
-  slovo("SmazÃ¡nÃ­  grafiky" , 0 , 56 , True)   
+  slovo("Smazání  grafiky" , 0 , 56 , True)   
 
   time.sleep(2)
   clr_grafika()   # grafiku je mozne smazat samostatne, takze puvodni text zustava
 
-  slovo("  Text zÅ¯stÃ¡vÃ¡  " , 0 , 56 , True)   
+  slovo("  Text zůstává  " , 0 , 56 , True)   
   time.sleep(2)
-  slovo("DokreslenÃ­  ÄÃ¡ry" , 0 , 56 , True)   
+  slovo("Dokreslení  čáry" , 0 , 56 , True)   
 
   for x in range(128):
     plot(127-x ,x/2      , 1)
@@ -474,7 +474,7 @@ def main():
     plot(127-x,(x/2) + 3 , 1)
 
   time.sleep(2)
-  slovo(" SmazÃ¡nÃ­  textu " , 0 , 56 , True)   
+  slovo(" Smazání  textu " , 0 , 56 , True)   
   time.sleep(1)
 
   clr_text()                # textovy displej je mozne take smazat samostatne
@@ -482,15 +482,15 @@ def main():
   mem_dump()                # grafika se ale v tom pripade musi obnovit z pameti
   
   time.sleep(1)
-  slovo("Grafika  zÅ¯stÃ¡vÃ¡" , 0 , 56 , True)   
+  slovo("Grafika  zůstává" , 0 , 56 , True)   
   time.sleep(2)
   clr_grafika()
 
 #- - - - - - - - - nahrani obrazku - - - - - - - - - - - - - - - - - -  
 
-  slovo("   zobrazenÃ­    " ,0,  0,False)  # 
+  slovo("   zobrazení    " ,0,  0,False)  # 
   slovo("    souboru     " ,0, 10,False)  # 
-  slovo("  s  obrÃ¡zkem   " ,0, 20,False)  # 
+  slovo("  s  obrázkem   " ,0, 20,False)  # 
   time.sleep(2)
   load_bmp12864("/home/pi/pokladnik.bmp")  # nahrani bitmapy o velikosti 128x64 bodu na displej 
 
@@ -540,7 +540,7 @@ def znak(kod , zn_x , supery , inverze=False):
   if (supery >  63) : supery = 63
   if (supery <   0) : supery = 0
 
-  kod = kod - 32     # v souboru s fontem je jako prvni znak definovanÃ¡ mezera s kodem 32
+  kod = kod - 32     # v souboru s fontem je jako prvni znak definovaná mezera s kodem 32
   superx = zn_x * 8
 
   # obraz znaku z fontu se bude postupne prenaset na displej bajt po bajtu v 8 krocich (zhora dolu) 
@@ -627,7 +627,7 @@ def h_cara2(supery = 0, odbajtu = 0, dobajtu = 5, pattern = 0b11111111):
 
 #==============================================================
 #zobrazeni nekolika znaku za sebou fontem 8x8
-# zn_x = pozice prvnÃ­ho znaku v textu je ve sloupci 0 az 15 ; supery = 0 az 63 (horni okraj znaku)
+# zn_x = pozice prvního znaku v textu je ve sloupci 0 az 15 ; supery = 0 az 63 (horni okraj znaku)
 
 def slovo(text , zn_x , supery , inverze=False):  
 
@@ -750,7 +750,7 @@ def nacist_font2(jmenosouboru):
 #==============================================================
 # podprogram pro zobrazeni textu obrim fontem (8x16 bodu)
 # definice fontu je soucasti ROM v displeji - neumi tedy ceske znaky
-# zn_x = pocatecni sloupec, na kterÃ½ se zacne text vypisovat [0 az 16]
+# zn_x = pocatecni sloupec, na který se zacne text vypisovat [0 az 16]
 # radka je v rozsahu [0 az 3]
 def velky_napis(text , zn_x , radka): 
 
@@ -939,7 +939,7 @@ def blikkurzor(stav):
 
 #==============================================================
 #nastavi pozici na prislusny sloupec (0 az 7) a radku (0 az 3)
-# pro velkÃ© znaky a ikony (16x16 bodu)
+# pro velké znaky a ikony (16x16 bodu)
 def ikopos(sloupec , radka): 
   posun = sloupec
   if (radka == 1) : posun = sloupec + 16
