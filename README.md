@@ -19,4 +19,4 @@ The problem is, that it is czech.
 
 This repository is an open source project to translate it, and to improve it.
 
-The credits for the original code goes to the author. Thanks, Milan Kúpra (czech guy haha)!
+The credits for the original code goes to the author. Thanks, Milan Krúpa (czech guy haha)!
