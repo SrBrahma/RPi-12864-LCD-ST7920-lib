@@ -20,7 +20,7 @@
 #
 # - mikrorow (microrow? but why that name)
 # - supery (y pos?)
-# -
+# - supers (x pos?)
 # -
 #
 # - = - = - = - = - = - = - = - = - = - = - = - = - = -
@@ -64,7 +64,8 @@
 #   "Supers" (0 to 63) - the top of the character is "supers" on the microline.
 #   When "inverse" = True, a dark character appears on a light background.
 #
-# 
+# Word (text, x, supers, inversion)
+#   Displays text (multiple characters) at "x" and "supers" (parameters same as "character ()").
 
 
 
@@ -175,7 +176,7 @@ def main():
 
 
 #==============================================================
-#              Starts the pointers of all the functions
+#              Starts the default examples
 #==============================================================
 
 
@@ -190,17 +191,17 @@ def main():
   time.sleep(2)
   PrintBigString("chr(1)...chr(32)", 0 , 1)
   charCode = 0
-  for r in range(2,4):
+  for r in range(2, 4):
     for s in range (16):
       charCode = charCode + 1
-      PrintCharGreat(charCode , s , r)   # Character display in text mode according to its (ASCII) code
+      PrintCharGreat(charCode, s, r)   # Character display in text mode according to its (ASCII) code
   time.sleep(3)
   
-  PrintBigString("chr(33)..chr(64)" , 0 , 1)
-  for r in range(2,4):
+  PrintBigString("chr(33)..chr(64)", 0, 1)
+  for r in range(2, 4):
     for s in range (16):
       charCode = charCode + 1
-      PrintCharGreat(charCode , s , r)
+      PrintCharGreat(charCode, s, r)
      
 
   time.sleep(3)
@@ -208,7 +209,7 @@ def main():
   time.sleep(1)
 
 #- - - - - - - - - Icons - - - - - - - - - - - - - - - - - - - -  
-  PrintBigString("Own Icons" , 0 , 0)
+  PrintBigString("Own Icons", 0, 0)
  
  
   # Definition of a zig-zag form of 4 own icons:
@@ -229,7 +230,7 @@ def main():
   iconData[13] =  0b1110000110000111
   iconData[14] =  0b0111111111111110
   iconData[15] =  0b0011111111111100
-  DefineIcon(0 , iconData)
+  DefineIcon(0, iconData)
 
   # Second user-defined icon (square with crash)
   iconData[0]  =  0b1111111111111111
@@ -248,7 +249,7 @@ def main():
   iconData[13] =  0b1110000000000111
   iconData[14] =  0b1111111111111111
   iconData[15] =  0b1111111111111111
-  DefineIcon(1 , iconData)
+  DefineIcon(1, iconData)
 
 
   # Third user-defined icon (empty square)
@@ -268,7 +269,7 @@ def main():
   iconData[13] =  0b1100000000000011
   iconData[14] =  0b1111111111111111
   iconData[15] =  0b1111111111111111
-  DefineIcon(2 , iconData) 
+  DefineIcon(2, iconData) 
   
   # Fourth user-defined icon (crisis in a circle)
   iconData[0]  =  0b0000011111100000
@@ -287,29 +288,29 @@ def main():
   iconData[13] =  0b0011000110001100
   iconData[14] =  0b0000100110010000
   iconData[15] =  0b0000011111100000
-  DefineIcon(3 , iconData) 
+  DefineIcon(3, iconData) 
 
-  PrintIcon(1 , 0 , 1)    # Icon c.2 at the top of the second row from the top
+  PrintIcon(1, 0, 1)    # Icon c.2 at the top of the second row from the top
   for icon in range (7):  # The rest of the row is filled with random icons  
     # When you print the icons for yourself, you do not have to set positions for each
-    icon = random.randint(0,3) * 2 # The last parameter is double the number of Icons
-    Send2Bytes( 1 ,  0 , icon)    
+    icon = random.randint(0, 3) * 2 # The last parameter is double the number of Icons
+    Send2Bytes(1, 0,icon)    
 
-  PrintIcon(2 , 0 , 2)    # Icon c.3 at the top of the third row from above
+  PrintIcon(2, 0, 2)    # Icon c.3 at the top of the third row from above
   for icon in range (7):  # The rest of the row is filled with random icons
     # When you print the icons for yourself, you do not have to set positions for each
-    icon = random.randint(0,3) * 2 # The last parameter is the double-pin number Icons
-    Send2Bytes( 1 ,  0 , icon)    
+    icon = random.randint(0, 3) * 2 # The last parameter is the double-pin number Icons
+    Send2Bytes(1, 0, icon)    
 
-  PrintIcon(3 , 0 , 3)    # Icon c.4 at the bottom of the bottom row
+  PrintIcon(3, 0, 3)    # Icon c.4 at the bottom of the bottom row
   for icon in range (7):  # The rest of the lines are filled with c.4
     # When you print the icons for yourself, you do not have to set positions for each
-    Send2Bytes( 1 ,  0 , 6)    # (6 = icon c.4)    
+    Send2Bytes(1, 0, 6)    # (6 = icon c.4)    
 
 
 
   time.sleep(2)
-  PrintBigString(" Change of definition ", 0 , 0)
+  PrintBigString("Change of definition", 0, 0)
   time.sleep(2)
   PrintBigString(" Fourth Icons ", 0 , 0)
   time.sleep(2)
@@ -333,7 +334,7 @@ def main():
   iconData[13] =  0b0000111100001111
   iconData[14] =  0b0000111100001111
   iconData[15] =  0b0000111100001111
-  DefineIcon(3 , iconData) 
+  DefineIcon(3, iconData) 
  
   time.sleep(3)
   ClearText()
@@ -341,7 +342,7 @@ def main():
 #- - - - - - - - -Cinske charactery - - - - - - - - - - - - - - - -  
   PrintBigString("   Like Icons   " , 0 , 0)
   PrintBigString("  Are displayed  " , 0 , 1)
-  PrintBigString(" And Czech characters " , 0 , 2)
+  PrintBigString(" And Czech chars " , 0 , 2)
   time.sleep(3)
   ClearText()
 
@@ -380,36 +381,36 @@ def main():
 # Print 8x8 dot font (in graphic mode)
 
   InitGraphicMode()
-  slovo("The display is y" , 0 ,  0 , False)  # Normal graphic on the top row
-  slovo("operate"       , 3 , 15 , False)        
-  slovo("also in graphics"    , 1 , 30 , False) 
-  slovo("mode"           , 5 , 45 , False)  
+  slovo("The display is y", 0, 0, False)  # Normal graphic on the top row
+  slovo("operate", 3, 15, False)        
+  slovo("also in graphics", 1, 30, False) 
+  slovo("mode", 5, 45, False)  
 
   time.sleep(2)
-  slovo("graphics"        , 5 , 30 , True)  # inverzne prepsany text  
+  slovo("graphics", 5, 30, True)  # Inversely rewritten text  
 
   time.sleep(3)
-  ClearGraphic()    # smazani graficke casti displeje
+  ClearGraphic()    # Delete the graphical parts of the display
 
 
   # In the same mode, y print individual characters according to their code
-  for kod in range(32,128):
-    column = (kod-32) % 16
-    row = int((kod-32)/16) * 11        # The spacing between the lines is 11 points
-    if (row / 22.0 == int(row/22)):  # Every other row is inverse
+  for kod in range(32, 128):
+    column = (kod - 32) % 16
+    row = int((kod - 32)/16) * 11      # The spacing between the lines is 11 points
+    if (row / 22.0 == int(row / 22)):  # Every other row is inverse
       inverze = True
     else:
       inverze = False
       
-    PrintIcon(kod , column, row , inverze) # Character subroutine in graphics mode
+    PrintIcon(kod, column, row, inverze) # Character subroutine in graphics mode
 
   time.sleep(2)
   ClearGraphic()
 
   for kod in range(128,256):
-    column = (kod-128) % 16
-    row = int((kod-128)/16) * 8 
-    character(kod , column, row , False)
+    column = (kod - 128) % 16
+    row = int((kod - 128) / 16) * 8 
+    character(kod, column, row, False)
 
   time.sleep(2)
   ClearGraphic()
@@ -417,39 +418,39 @@ def main():
 
 #- - - - - - - Point printing and car - - - - - - - - - - - - - - - - - -  
 
-  slovo("In this mode" ,0, 2,False)  # Normal writing 2 pixels from the top edge
-  slovo("Is y to draw" ,0,11,False)        
-  slovo("  Points and line   " ,0,20,False) 
+  slovo("In this mode",0, 2,False)  # Normal writing 2 pixels from the top edge
+  slovo("Is y to draw",0,11,False)        
+  slovo("  Points and line   ", 0, 20, False) 
 
   # Oramovani --[Window?]-- display with full car
-  h_line (  0 ,  0 , 127 , 1)          # Horizontal line at any position
-  h_line2( 63 ,  0 ,   7 , 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
-  v_line (  0 ,  0 ,  63 , 0b11111111) # Vertical line in any position with mask setting
-  v_line (127 ,  0 ,  63 , 0b11111111)
+  DrawHorizontalLine (  0, 0, 127, 1)          # Horizontal line at any position
+  DrawHorizontalLine2( 63, 0,   7, 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
+  DrawVerticalLine (  0, 0,  63, 0b11111111) # Vertical line in any position with mask setting
+  DrawVerticalLine (127, 0,  63, 0b11111111)
 
   # Internal small rectangle with a carcass
-  h_line2(  31 ,  1 ,   6 , 0b11001100)
-  h_line2( 56 ,   1 ,   6 , 0b11001100)
-  v_line ( 16 ,  31 ,  56 , 0b11001100)
-  v_line (111 ,  31 ,  56 , 0b11001100)
+  DrawHorizontalLine2( 31,  1,  6, 0b11001100)
+  DrawHorizontalLine2( 56,  1,  6, 0b11001100)
+  DrawVerticalLine ( 16, 31, 56, 0b11001100)
+  DrawVerticalLine (111, 31, 56, 0b11001100)
 
 
   # Randomly popping a point into a small rectangle in inverse mode
   for i in range(2000):
     x= int(random.randint(17,110))
     y= int(random.randint(32,55))
-    plot( x , y , 2)   # Print an inverse point at the coordinates [x, y]
+    plot(x, y, 2)   # Print an inverse point at the coordinates [x, y]
 
 
 #- - - - - - - - - - - - Different styles of --horizontalnich-- cars - - - - - - - - - - - - - - - - -  
   ClearGraphic()
 
-  h_line2(  0 ,  2 ,   5 , 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
-  h_line2( 10 ,  3 ,   4 , 0b11001100) # Speed mountains. Line in a 16-column raster with mask setting
-  h_line2( 20 ,  2 ,   5 , 0b11110000) # Speed mountains. Line in a 16-column raster with mask setting
-  h_line2( 30 ,  1 ,   6 , 0b10101010) # Speed mountains. Line in a 16-column raster with mask setting
-  h_line2( 40 ,  0 ,   7 , 0b11110101) # Speed mountains. Line in a 16-column raster with mask setting
-  h_line2( 50 ,  1 ,   6 , 0b01110101) # Speed mountains. Line in a 16-column raster with mask setting
+  DrawHorizontalLine2( 0, 2, 5, 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
+  DrawHorizontalLine2(10, 3, 4, 0b11001100) # Speed mountains. Line in a 16-column raster with mask setting
+  DrawHorizontalLine2(20, 2, 5, 0b11110000) # Speed mountains. Line in a 16-column raster with mask setting
+  DrawHorizontalLine2(30, 1, 6, 0b10101010) # Speed mountains. Line in a 16-column raster with mask setting
+  DrawHorizontalLine2(40, 0, 7, 0b11110101) # Speed mountains. Line in a 16-column raster with mask setting
+  DrawHorizontalLine2(50, 1, 6, 0b01110101) # Speed mountains. Line in a 16-column raster with mask setting
 
   time.sleep(3)
 
@@ -458,31 +459,31 @@ def main():
 #- - - - - - - - - - drawing - - - - - - - - - - - - - - - - - - - -  
   # Draw a double circle using the first print point on the display (slowly)
   for circle in range(0,6283,4):
-    x = int(((math.sin(circle/1000.0) * 30.0)) + 32)
-    y = int(((math.cos(circle/1000.0) * 30.0)) + 32)
+    x = int(((math.sin(circle / 1000.0) * 30.0)) + 32)
+    y = int(((math.cos(circle / 1000.0) * 30.0)) + 32)
     plot(x,y,0)
-    x = int(((math.sin(circle/1000.0) * 20.0)) + 32)
-    y = int(((math.cos(circle/1000.0) * 20.0)) + 32)
+    x = int(((math.sin(circle / 1000.0) * 20.0)) + 32)
+    y = int(((math.cos(circle / 1000.0) * 20.0)) + 32)
     plot(x,y,0)
 
   # Draw five of the circles using the memo
   # And then swipe the memory to the display (fast)
-  for circle in range(0,6283,4):
-    x = int(((math.sin(circle/1000.0) * 30.0)) + 96)
-    y = int(((math.cos(circle/1000.0) * 30.0)) + 32)
-    mem_plot(x,y,0)
-    x = int(((math.sin(circle/1000.0) * 25.0)) + 96)
-    y = int(((math.cos(circle/1000.0) * 25.0)) + 32)
-    mem_plot(x,y,0)
-    x = int(((math.sin(circle/1000.0) * 20.0)) + 96)
-    y = int(((math.cos(circle/1000.0) * 20.0)) + 32)
-    mem_plot(x,y,0)
-    x = int(((math.sin(circle/1000.0) * 15.0)) + 96)
-    y = int(((math.cos(circle/1000.0) * 15.0)) + 32)
-    mem_plot(x,y,0)
-    x = int(((math.sin(circle/1000.0) * 10.0)) + 96)
-    y = int(((math.cos(circle/1000.0) * 10.0)) + 32)
-    mem_plot(x,y,0)
+  for circle in range(0, 6283, 4):
+    x = int(((math.sin(circle / 1000.0) * 30.0)) + 96)
+    y = int(((math.cos(circle / 1000.0) * 30.0)) + 32)
+    mem_plot(x, y, 0)
+    x = int(((math.sin(circle / 1000.0) * 25.0)) + 96)
+    y = int(((math.cos(circle / 1000.0) * 25.0)) + 32)
+    mem_plot(x, y, 0)
+    x = int(((math.sin(circle / 1000.0) * 20.0)) + 96)
+    y = int(((math.cos(circle / 1000.0) * 20.0)) + 32)
+    mem_plot(x, y, 0)
+    x = int(((math.sin(circle / 1000.0) * 15.0)) + 96)
+    y = int(((math.cos(circle / 1000.0) * 15.0)) + 32)
+    mem_plot(x, y, 0)
+    x = int(((math.sin(circle / 1000.0) * 10.0)) + 96)
+    y = int(((math.cos(circle / 1000.0) * 10.0)) + 32)
+    mem_plot(x, y, 0)
 
   MemDump()    # Spraying data from memory to display
 
@@ -493,27 +494,27 @@ def main():
 
 #- - - - - - - - - - Overwrite text and graphic mode - - - - - - - - - -  
 
-  slovo("    Graphic    " , 0 ,  0 , False)
-  slovo("a  textovy rezim" , 0 , 10 , False) 
-  slovo("je  y pouzit" , 0 , 20 , False) 
-  slovo("     zaroven    " , 0 , 30 , False) 
+  slovo("    Graphic    ",  0,  0, False)
+  slovo("a  textovy rezim", 0, 10, False) 
+  slovo("je  y pouzit",     0, 20, False) 
+  slovo("     zaroven    ", 0, 30, False) 
 
   time.sleep(2)
   ClearGraphic()
  
   InitTextMode()      # Switch the display to text mode
-  PrintBigString("Velky  napis" , 2 , 0)
-  PrintBigString("v textovem"   , 3 , 1)
-  PrintBigString("mode"       , 5 , 2)
-  PrintIcon(1 , 0 , 2)
-  PrintIcon(1 , 7 , 2)  
+  PrintBigString("Velky  napis", 2, 0)
+  PrintBigString("v textovem"  , 3, 1)
+  PrintBigString("mode"        , 5, 2)
+  PrintIcon(1, 0, 2)
+  PrintIcon(1, 7, 2)  
 
 
   time.sleep(2)
 
   InitGraphicMode()  # Switch display to graphic mode
-  h_line2( 53 ,  0 ,   7 , 0b10011001) 
-  slovo("Graficka row" , 1 , 56 , False)   
+  DrawHorizontalLine2(53, 0, 7, 0b10011001) 
+  slovo("Graficka row", 1, 56, False)   
 
 
   
@@ -656,17 +657,31 @@ def character(kod , zn_x , supery , inverze=False):
 
 #==============================================================
 # Draw a horizontal line point by point
-def h_line(supery, fromPixel=0 , do=127, style=1):  
-  for x in range(fromPixel, do+1):
-    plot(x,supery,style)
-
+def DrawHorizontalLine(posY, fromX=0 , toX=127, style = 1):  
+  for posX in range(fromPixel, toX + 1):
+    plot(posX, posY, style)
 
 
 #==============================================================
+# Draw horizontal line from the edge to the edge after the bytes
+def DrawHorizontalLine2(posY = 0, fromByte = 0, toByte = 5, pattern = 0b11111111):  
+  shift=fromByte
+  if (posY >= 32):
+    posY = posY - 32
+    shift = shift + 8     
+
+  Send2Bytes( 0, 0b10000000 + posY, 0b10000000 + shift )     
+  for r in range(toByte - fromByte + 1):
+      Send2Bytes(1, pattern, pattern)     
+      mapa[shift + r, posY, 0] = pattern 
+      mapa[shift + r, posY, 1] = pattern 
+  
+  
+#==============================================================
 # Draw a vertical line using bit masks
-def v_line(superx, fromPixel=0 , do=63, pattern = 255):  
+def DrawVerticalLine(posX, fromY = 0, toY = 63, pattern = 255):  
   poz_pat = 0                              # pozice bitu v patternu
-  for y in range(fromPixel , toPixel+1 ):
+  for posY in range(fromY , toY + 1):
     maska = (0b10000000 >> (poz_pat % 8))  # podle zadaneho patternu vybira jednotlive bity
     bitpat= pattern & maska
     if (bitpat == 0):                      # ktere na displeji bud zobrazi, nebo smaze
@@ -674,32 +689,19 @@ def v_line(superx, fromPixel=0 , do=63, pattern = 255):
     else:
       style = 1
 
-    plot(superx,y,style)
+    plot(posX, posY, style)
     poz_pat = poz_pat + 1
 
 
 
-#==============================================================
-# Draw horizontal line from the edge to the edge after the bytes
-def h_line2(supery = 0, fromByte = 0, toByte = 5, pattern = 0b11111111):  
-  shift=fromByte
-  if (supery >= 32):
-    supery = supery - 32
-    shift = shift + 8     
 
-  Send2Bytes( 0, 0b10000000 + supery , 0b10000000 + shift )     
-  for r in range(toByte - fromByte + 1):
-      Send2Bytes( 1, pattern , pattern )     
-      mapa[shift + r , supery,0] = pattern 
-      mapa[shift + r , supery,1] = pattern 
-  
 
 
 #==============================================================
 # Displaying several characters behind the 8x8 font
 # Zn_x = the position of the first character in the text is in column 0 to 15; Supers = 0 to 63 (upper margin of the character)
 
-def slovo(text , zn_x , supery , inverze=False):  
+def slovo(text, zn_x, supery, invert=False):  
 
   if (isinstance(text, unicode) == False):  # If the text is not in unicode, then transfer it
     text = unicode(text, "utf-8")           # Convert text from UTF-8 to unicode
@@ -709,36 +711,36 @@ def slovo(text , zn_x , supery , inverze=False):
     if (zn_x < 16): # Screen overlay
       if (ord(text[zn:zn + 1]) > 127):   # As for the ASCII character, proceed as described in the table above
         try:                    # If there is no special code defined in the table, ...
-          character(cz2[ord(text[zn:zn + 1])], zn_x, supery, inverze)
+          character(cz2[ord(text[zn:zn + 1])], zn_x, supery, invert)
         except:                 # ... the program will terminate the error of the non-existent index of the variable cz2 [].
-          character(164, zn_xx, supery , inverze)  # In this case, replace the undefined character character "wheel with teckama"
+          character(164, zn_xx, supery, invert)  # In this case, replace the undefined character character "wheel with teckama"
       else:
-        character(ord(text[zn:zn + 1]), zn_x, supery , inverze) # ASCII charactery tisknout normalne
+        character(ord(text[zn:zn + 1]), zn_x, supery, invert) # ASCII charactery tisknout normalne
       zn_x = zn_x + 1
 
 
 
 #==============================================================
 # 1-point display / deletion / inversion at superx coordinates (0 to 127) and supers (0 to 63)
-def plot(superx , supery , style=1):
+def plot(posX, posY, style = 1):
 
   # Checking for the correct range of coordinates and optionally adjusting them to the extreme values
-  if (superx > 127): superx = 127
-  if (superx < 0  ): superx = 0
-  if (supery > 63 ): supery = 63
-  if (supery < 0  ): supery = 0
+  if (posX > 127): posX = 127
+  if (posX < 0  ): posX = 0
+  if (posY > 63 ): posY = 63
+  if (posY < 0  ): posY = 0
 
-  horiz = int (superx / 16)
-  if (supery >= 32):
-    supery = supery - 32
+  horiz = int (posX / 16)
+  if (posY >= 32):
+    posY = posY - 32
     horiz = horiz + 8
 
-  minibit = superx % 16
+  minibit = posX % 16
  
-  Send2Bytes ( 0, 0b10000000 + supery , 0b10000000 + horiz )  # Setting the graphics address
+  Send2Bytes (0, 0b10000000 + posY, 0b10000000 + horiz)  # Setting the graphics address
 
-  orignal_leva  = mapa[horiz,supery,0]
-  orignal_prava = mapa[horiz,supery,1]
+  orignal_leva  = mapa[horiz, posY, 0]
+  orignal_prava = mapa[horiz, posY, 1]
 
   if (minibit < 8):
     if (style == 1):  # Draw a point
@@ -761,31 +763,31 @@ def plot(superx , supery , style=1):
     leftByte = orignal_leva
 
   Send2Bytes( 1, leftByte, rightByte)
-  mapa[horiz,supery,0] = leftByte
-  mapa[horiz,supery,1] = rightByte
+  mapa[horiz,posY,0] = leftByte
+  mapa[horiz,posY,1] = rightByte
 
 
 
 #==============================================================
-# 1-point display / deletion / inversion at superx coordinates (0 to 127) and supers (0 to 63)
-def mem_plot(superx , supery , style=1):
-  horiz = int(superx / 16)
+# 1-point display / deletion / inversion at posX coordinates (0 to 127) and supers (0 to 63)
+def mem_plot(posX, posY, style=1):
+  horiz = int(posX / 16)
   
-  if (supery >= 32):
-    supery = supery - 32
+  if (posY >= 32):
+    posY = posY - 32
     horiz = horiz + 8
 
-  minibit = superx % 16
+  minibit = posX % 16
  
-  orignal_leva  = mapa[horiz,supery,0]
-  orignal_prava = mapa[horiz,supery,1]
+  orignal_leva  = mapa[horiz, posY, 0]
+  orignal_prava = mapa[horiz, posY, 1]
 
   if (minibit < 8):
       if (style == 1):  # Draw a point
         leftByte = (0b10000000 >> minibit) | orignal_leva
       if (style == 0):  # Delete point
         leftByte = ~(0b10000000 >> minibit) & orignal_leva
-      if (style == 2):  # Delete point
+      if (style == 2):  # Invert point
         leftByte = (0b10000000 >> minibit) ^ orignal_leva
 
       rightByte = orignal_prava
@@ -794,25 +796,25 @@ def mem_plot(superx , supery , style=1):
         rightByte = (0b10000000 >> (minibit-8)) | orignal_prava
       if (style == 0):  # Delete point
         rightByte = ~(0b10000000 >> (minibit-8)) & orignal_prava
-      if (style == 2):  # Delete point
+      if (style == 2):  # Invert point
         rightByte = (0b10000000 >> (minibit-8)) ^ orignal_prava
 
       leftByte = orignal_leva
 
-  mapa[horiz,supery,0] = leftByte
-  mapa[horiz,supery,1] = rightByte
+  mapa[horiz, posY, 0] = leftByte
+  mapa[horiz, posY, 1] = rightByte
 
 
 
 #==============================================================
 # Load 8x8 point font from file to list "font2 []"
 def nacist_font2(jmenosouboru):
-  fontfile=file(jmenosouboru,"r")
-  adresafontu=0
+  fontfile = file(jmenosouboru, "r")
+  adresafontu = 0
   for row in fontfile:
     rozlozeno = row.split(",")                   # vysosani jednotlivych byteu z jedne radky ...
     for byte in range(8):                          # 8 byte on one row in a file
-      font2[adresafontu] = int(rozlozeno[byte][-4:],0) # ... and save everyone on the list
+      font2[adresafontu] = int(rozlozeno[byte][-4:], 0) # ... and save everyone on the list
       adresafontu = adresafontu + 1
   fontfile.close()
   
@@ -823,14 +825,14 @@ def nacist_font2(jmenosouboru):
 # Font definition is a part of the ROM in the display - therefore not Czech characters
 # Zn_x = Initial column where the text will begin to print [0 to 16]
 # Row is in the range [0 to 3]
-def PrintBigString(text , zn_x , row): 
+def PrintBigString(text, zn_x, row): 
 
   if (len(text)+ zn_x > 16):      # pokud je na radce text delsi, nez 16 characteru,
     text = text[0:16 - zn_x]        # ... tak se konec odsekne
  
-  SetTextCursorPos(zn_x , row)         # startovni poloha textu se posle do displeje
+  SetTextCursorPos(zn_x, row)         # startovni poloha textu se posle do displeje
   for character in range(len(text)):
-    SendByte( 1, ord(text[character:character+1]))  # charactery z textu se postupne posilaji do displeje
+    SendByte(1, ord(text[character:character+1]))  # charactery z textu se postupne posilaji do displeje
     pomtext = txtmapa[row][:zn_x+character] + text[character:character+1] + txtmapa[row][zn_x+character+1:]
     txtmapa[row] = pomtext      # pamet pro textovy rezim
 
@@ -840,7 +842,7 @@ def PrintBigString(text , zn_x , row):
 # Single character display in text mode
 def PrintCharGreat(code, zn_x, row): 
 
-  SetTextCursorPos(zn_x , row)         # The start position of the text is sent to the display
+  SetTextCursorPos(zn_x, row)         # The start position of the text is sent to the display
   SendByte(1, code)            # The character code is sent to the display
   pomtext = txtmapa[row][:zn_x] + chr(code) + txtmapa[row][zn_x+1:]
   txtmapa[row] = pomtext        # Memory for text mode
@@ -852,16 +854,16 @@ def PrintCharGreat(code, zn_x, row):
 # Column (0 to 15) and line (0 to 3)
 def SetTextCursorPos(column , row):  
   shift = column
-  if (row == 1) : shift = column + 32
-  if (row == 2) : shift = column + 16
-  if (row == 3) : shift = column + 48
+  if (row == 1): shift = column + 32
+  if (row == 2): shift = column + 16
+  if (row == 3): shift = column + 48
 
   SendByte( 0, 0b10000000 + int(shift / 2))  # Address Counter na pozadovanou pozici
 
   # In the case of --lichen-- columns, the character must be filled in with the character on the display before the new printout
-  if (column / 2.0 != column/2):
+  if (column / 2.0 != column / 2):
     orignal_predcharacter = txtmapa[row][column - 1:column] # "Predcharacter" is determined from the auxiliary text memory
-    SendByte( 1, ord(orignal_predcharacter)) 
+    SendByte(1, ord(orignal_predcharacter)) 
 
 
 
@@ -879,20 +881,20 @@ def LoadBMP12864(imageRelativePath):
   zacatekdat = ord(data[10]) + (ord(data[11]) * 256) + (ord(data[12]) * 65536) + (ord(data[13]) * 16777216)
   byte = zacatekdat
 
-  for mikrorow in range (63,-1,-1):  # Read data variables [] byte after byte and store in memory (map [])
-    supery = mikrorow
+  for mikrorow in range (63, -1, -1):  # Read data variables [] byte after byte and store in memory (map [])
+    posY = mikrorow
     if (mikrorow > 31):
-      supery = supery - 32
+      posY = posY - 32
       shift = 8
     else:
       shift = 0
-    Send2Bytes( 0, 0b10000000 + supery , 0b10000000 + shift )  # Setting the graphics address
+    Send2Bytes(0, 0b10000000 + posY, 0b10000000 + shift)  # Setting the graphics address
     for column in range (8):
       leftByte = (ord(data[byte]))
       rightByte = (ord(data[byte+1]))
-      Send2Bytes( 1, leftByte, rightByte)     # 
-      mapa[column+shift , supery,0] = leftByte
-      mapa[column+shift , supery,1] = rightByte
+      Send2Bytes(1, leftByte, rightByte)     # 
+      mapa[column + shift , posY,0] = leftByte
+      mapa[column+shift , posY,1] = rightByte
 
       byte = byte + 2          # Passes to another double-out of graphical data
 
@@ -916,18 +918,18 @@ def MemDump():
 def ClearGraphic(pattern = 0): 
 
   InitGraphicMode()
-  SendByte( 0, 0b00110110)  # function set (extend instruction set)
-  SendByte( 0, 0b00110100)  # function set (graphic OFF) - aby nebylo videt postupne mazani displeje
-  SendByte( 0, 0b00001000)  # displ.=OFF , cursor=OFF , blink=OFF
+  SendByte(0, 0b00110110)  # function set (extend instruction set)
+  SendByte(0, 0b00110100)  # function set (graphic OFF) - aby nebylo videt postupne mazani displeje
+  SendByte(0, 0b00001000)  # displ.=OFF , cursor=OFF , blink=OFF
   
   for vertical in range(32):  
-    Send2Bytes( 0, 0b10000000 + vertical, 0b10000000 )  # Setting the address on the display at the beginning of the micro-bar
+    Send2Bytes(0, 0b10000000 + vertical, 0b10000000 )  # Setting the address on the display at the beginning of the micro-bar
     for horizontal in range (16):
-      Send2Bytes( 1, pattern , pattern )     # Double-bits fill the entire display with the same code   
+      Send2Bytes(1, pattern, pattern)     # Double-bits fill the entire display with the same code   
  
       # And this code still writes to individual positions in the cache
-      mapa[horizontal,vertical,0]=pattern    
-      mapa[horizontal,vertical,1]=pattern
+      mapa[horizontal, vertical, 0] = pattern    
+      mapa[horizontal, vertical, 1] = pattern
       
   SendByte( 0, 0b00110110)  # function set (graphic ON) - smazany displej se zobrazi okamzite
 
@@ -999,9 +1001,9 @@ def DefineIcon(iconId, iconData):
 # Blink cursor after the last character entered in text mode
 # Is designed for Chinese characters, so a 16x16-dot large square
 # (It's useless for European characters (8x16 points)
-def BlinkCursor(state):
+def BlinkLastChineseChar(state):
   InitTextMode()
-  if(state == True):
+  if (state == True):
     SendByte(0, 0b00001111)  # displ.=ON , cursor=ON , blink=ON
   else:
     SendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
@@ -1011,13 +1013,13 @@ def BlinkCursor(state):
 #==============================================================
 # Set the position to the appropriate column (0 to 7) and the row (0 to 3)
 # For big characters and Icons (16x16 points)
-def SetIconPos (column, row): 
+def SetIconPos(column, row): 
   shift = column
-  if (row == 1) : shift = column + 16
-  if (row == 2) : shift = column + 8
-  if (row == 3) : shift = column + 24
+  if (row == 1): shift = column + 16
+  if (row == 2): shift = column + 8
+  if (row == 3): shift = column + 24
 
-  SendByte( 0, 0b10000000 + shift)  # Address Counter to the desired position
+  SendByte(0, 0b10000000 + shift)  # Address Counter to the desired position
 
 
 
@@ -1043,7 +1045,7 @@ def QuickPulse():
 
 #==============================================================
 # Subprogram for sending two bytes after serial communication without interrupting between individual bytes
-def Send2Bytes(  rs,  byte1, byte2):
+def Send2Bytes(rs, byte1, byte2):
 
   serd(1)                # The beginning of the communication is done with the "synchro" sequence of 5 singles
   for i in range (5):
@@ -1056,26 +1058,26 @@ def Send2Bytes(  rs,  byte1, byte2):
   serd(0)                # Followed by zero bit
   QuickPulse()
  
-  for i in range(7,3,-1):     # And then top four bits from the first byte
+  for i in range(7, 3, -1):     # And then top four bits from the first byte
     bit = (byte1 & (2**i)) >> i
     serd(bit)
     QuickPulse()
 
   serd(0)                     # The next is the 4x "0"
-  for i in range (4):
+  for i in range(4):
     QuickPulse()
 
-  for i in range(3,-1,-1):    # And then the remainder of the first byte (lower 4 bits)
+  for i in range(3, -1, -1):    # And then the remainder of the first byte (lower 4 bits)
     bit = (byte1 & (2**i)) >> i
     serd(bit)
     QuickPulse()
 
   serd(0)                      # Then the separation sequence is again 4x "0"
-  for i in range (4):
+  for i in range(4):
     QuickPulse()
 
   # Byte types were sent immediately without "head" (without 5x "1" + RW bit + RS bit + "0")
-  for i in range(7,3,-1):        # Even this kind of byte is divided into 2 parts (upper 4 bits)
+  for i in range(7, 3, -1):        # Even this kind of byte is divided into 2 parts (upper 4 bits)
     bit = (byte2 & (2**i)) >> i
     serd(bit)
     QuickPulse()
@@ -1084,23 +1086,23 @@ def Send2Bytes(  rs,  byte1, byte2):
   for i in range (4):
     QuickPulse()
 
-  for i in range(3,-1,-1):       # Bottom 4 bits
+  for i in range(3, -1, -1):       # Bottom 4 bits
     bit = (byte2 & (2**i)) >> i
     serd(bit)
     QuickPulse()
 
   serd(0)                        # Last separating sequence 4x "0"
-  for i in range (4):
+  for i in range(4):
     QuickPulse()
 
 
 
 #==============================================================
 # Send one byte after serial communication
-def SendByte(  rs,  byte):
+def SendByte(rs,  byte):
 
   serd(1)                # the beginning of the communication is done with the "synchro" sequence of 5 singles
-  for i in range (5):
+  for i in range(5):
     QuickPulse()
   
   serd(0)                    # Then the RW bit is sent (when set to "0")        
@@ -1110,23 +1112,23 @@ def SendByte(  rs,  byte):
   serd(0)                     # Followed by zero bit                                                        
   QuickPulse()
   
-  for i in range(7,3,-1):     # And then up four bits of the sent byte
+  for i in range(7, 3, -1):     # And then up four bits of the sent byte
     bit = (byte & (2**i)) >> i
     serd(bit)
     QuickPulse()
 
   serd(0)                     # Then the separation sequence is sent 4x "0"
-  for i in range (4):
+  for i in range(4):
     QuickPulse()
 
-  for i in range(3,-1,-1):    # Followed by the rest of the data (the bottom 4 bits of the sent byte)
+  for i in range(3, -1, -1):    # Followed by the rest of the data (the bottom 4 bits of the sent byte)
       
     bit = (byte & (2**i)) >> i
     serd(bit)
     QuickPulse()
 
   serd(0)                      # To restart the separation sequence 4x "0"
-  for i in range (4):
+  for i in range(4):
     QuickPulse()
 
 
