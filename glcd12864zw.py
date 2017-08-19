@@ -7,7 +7,7 @@
 # Notes from translation:
 #
 # English translation from this translation project:
-# https://github.com/SrBrahma/RPi-128x64LCD-ST7920-controller-12864ZW-
+# https://github.com/SrBrahma/RPi-12864-LCD-ST7920-lib
 #
 # Most of the translation is crappy. It is based on Google Translator.
 # There is still missing some words that I can't find anywhere, maybe typos from author.
@@ -135,7 +135,7 @@
 # 3  VO                     - 
 # 4  (RS Data/Command)      - +5V (CHIP SELECT - In serial communication)
 # 5  (R/W Read/Write)       - RasPi (Serial data) - GPIO7 (pin26) 
-# 6  (E - Strobe)       - RasPi (serial CLOCK) - GPIO8 (pin24)
+# 6  (E - Strobe)           - RasPi (serial CLOCK) - GPIO8 (pin24)
 # 7  (Data bit0)            - 
 # 8  (Data bit1)            - 
 # 9  (Data bit2)            - 
@@ -659,7 +659,7 @@ def PrintIcon(iconId, x, y):
 #==============================================================
 # Draw a horizontal line point by point
 def DrawHorizontalLine(posY, fromX = 0, toX=127, style = 1):  
-  for posX in range(fromPixel, toX + 1):
+  for posX in range(fromX, toX + 1):
     Plot(posX, posY, style)
 
 
