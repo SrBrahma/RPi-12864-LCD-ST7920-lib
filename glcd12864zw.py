@@ -1212,4 +1212,4 @@ if __name__ == '__main__':
   try:
     main()
   finally:
-	GPIO.cleanup()
+    GPIO.cleanup()
