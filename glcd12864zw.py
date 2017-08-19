@@ -449,7 +449,7 @@ def main():
 
 
   # In the same mode, y print individual characters according to their code
-  for iconCode in range(32, 128):
+  for code in range(32, 128):
     column = (code - 32) % 16
     row = int((code - 32)/16) * 11      # The spacing between the lines is 11 points
     if (row / 22.0 == int(row / 22)):  # Every other row is inverse
