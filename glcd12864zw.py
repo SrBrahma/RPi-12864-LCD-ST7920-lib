@@ -41,8 +41,8 @@
 #
 # ClearGraphic(pattern)
 #   Fills the entire contents of the graphical part of the display by the byte.
-#   (When 0x00 is deleted, 0xFF will fill it with white dots, other values ​​will fill the display
-#   with different vertical lines). The text part of the display remains unchanged.
+#   (When 0x00 is deleted, 0xFF will fill it with white dots, other values will
+#   fill the display with different vertical lines). The text part of the display remains unchanged.
 #
 # ClearDisplay()
 #   Performs both previous deletions at the same time. After returning the display is switched to text mode.
@@ -59,7 +59,7 @@
 #   y = line 0 to 3
 #
 # ==== Graphic font 8x8 pixels
-#   PrintCharGraphicMode(code, x, posY, inversion)
+#   PrintCharGraphicMode(code, x, supers, inversion)
 #     Displays one PrintCharGraphicMode with the ASCII code "code" at the "x" (0 to 15) coordinates,
 #     posY (0 to 63) - the y position to
 #     When "inverse" = True, a dark PrintCharGraphicMode appears on a light background.
@@ -151,7 +151,7 @@
 # 19 (Podsvet - A)          - +5V (Or any LED brightness regulator - about 60mA)
 # 20 (Podsvet - K)          - RasPi (GPIO GND - pin 6)
 
-
+import os
 import time              # Various operations with time (pauses)
 import RPi.GPIO as GPIO  # It can only be used when attaching the E or RS signal to the GPIO in RasPi
 import math              # It will only be used in the examples of drawing circles
@@ -226,7 +226,7 @@ def main():
 
   Init()              # Basic HW system setup - port directions on the expander and reset the display
   ClearDisplay(0)     # Complete deletion of the display
-  nacist_font2("./font2.txt")  # Retrieve an external font from the file
+  nacist_font2("font2.txt")  # Retrieve an external font from the file
 
 
 
@@ -863,7 +863,10 @@ def MemPlot(posX, posY, style = 1):
 #==============================================================
 # Load 8x8 point font from file to list "font2 []"
 def nacist_font2(fileName):
-  fontfile = file(fileName, "r")
+
+  fullPathFileName = os.path.join(os.path.dirname(os.path.realpath('__file__')), fileName)
+  print (fullPathFileName)
+  fontfile = open(fullPathFileName, "r")
   adresafontu = 0
   for row in fontfile:
     rozlozeno = row.split(",")                          # Saturation of individual bytes from one line ...
@@ -879,15 +882,15 @@ def nacist_font2(fileName):
 # Font definition is a part of the ROM in the display - therefore not Czech characters
 # bytePosX = Initial column where the string will begin to print [0 to 16]
 # Row is in the range [0 to 3]
-def PrintBigStringTextMode(string, bytePosX, row): 
+def PrintBigStringTextMode(string, column, row): 
 
-  if (len(string)+ bytePosX > 16):    # If the line is longer than 16 characters,
-    string = string[0:16 - bytePosX]  # ... so the end is cut off
+  if (len(string) + column > 16):    # If the line is longer than 16 characters,
+    string = string[0:16 - column]  # ... so the end is cut off
  
-  SetTextCursorPos(bytePosX, row)     # The start position of the text is sent to the display
+  SetTextCursorPos(column, row)     # The start position of the text is sent to the display
   for PrintCharGraphicMode in range(len(string)):
     SendByte(1, ord(string[PrintCharGraphicMode:PrintCharGraphicMode+1]))  # Characters from the text are gradually streaked into the display
-    pomtext = txtmapa[row][:bytePosX+PrintCharGraphicMode] + string[PrintCharGraphicMode:PrintCharGraphicMode+1] + txtmapa[row][zn_x+PrintCharGraphicMode+1:]
+    pomtext = txtmapa[row][:column + PrintCharGraphicMode] + string[PrintCharGraphicMode:PrintCharGraphicMode + 1] + txtmapa[row][column+PrintCharGraphicMode+1:]
     txtmapa[row] = pomtext            # Memory for text mode
 
 
@@ -1206,4 +1209,7 @@ def Init():
 
 #==============================================================
 if __name__ == '__main__':
-  main()
+  try:
+    main()
+  finally:
+	GPIO.cleanup()
