@@ -450,22 +450,22 @@ def main():
 
   # In the same mode, y print individual characters according to their code
   for iconCode in range(32, 128):
-    column = (iconCode - 32) % 16
-    row = int((iconCode - 32)/16) * 11      # The spacing between the lines is 11 points
+    column = (code - 32) % 16
+    row = int((code - 32)/16) * 11      # The spacing between the lines is 11 points
     if (row / 22.0 == int(row / 22)):  # Every other row is inverse
       invert = True
     else:
       invert = False
       
-    PrintIcon(iconCode, column, row, invert) # PrintCharGraphicMode subroutine in graphics mode
+    PrintCharGraphicMode(code, column, row, invert) # PrintCharGraphicMode subroutine in graphics mode
 
   time.sleep(2)
   ClearGraphic()
 
-  for kod in range(128, 256):
-    column = (kod - 128) % 16
-    row = int((kod - 128) / 16) * 8 
-    PrintCharGraphicMode(kod, column, row, False)
+  for code in range(128, 256):
+    column = (code - 128) % 16
+    row = int((code - 128) / 16) * 8 
+    PrintCharGraphicMode(code, column, row, False)
 
   time.sleep(2)
   ClearGraphic()
@@ -697,7 +697,7 @@ def DrawVerticalLine(posX, fromY = 0, toY = 63, pattern = 255):
 #==============================================================
 # Displaying one PrintCharGraphicMode from the 8x8 point font
 # bytePosX = x PrintCharGraphicMode position (0 to 15, translated to multiples of 8 up to 128), posY = 0 to 63
-def PrintCharGraphicMode(ascii8bitCode, bytePosX , posY , invert=False):  
+def PrintCharGraphicMode(ascii8bitCode, bytePosX, posY , invert = False):  
 
   # Control of lightning parameters and their possible override at the limit
   if (ascii8bitCode    <  32): ascii8bitCode = 32
