@@ -930,7 +930,7 @@ def DrawCircle(circleCenterX, circleCenterY, radius, startDegree = 0, stopDegree
 def DrawRadiusLine(fromX, fromY, degree, radius, style = 1):
         targetX = int(round(math.cos(math.radians(degree)) * radius + fromX))
         targetY = int(round(math.sin(math.radians(degree)) * (- radius) + fromY))
-        graphicLCD.DrawGenericLine(fromX, fromY, targetX, targetY, style)
+        DrawGenericLine(fromX, fromY, targetX, targetY, style)
 
 #==============================================================
 # Uploading a two-color BMP image of a 128x64 point to a variable map []
@@ -974,12 +974,12 @@ def Plot(posX, posY, style = 1):
     if (posY > 63 ): posY = 63
     if (posY < 0  ): posY = 0
 
-    horiz = int (posX / 16)
+    horiz = posX >> 4 # Same as / 16
     if (posY >= 32):
-        posY = posY - 32
-        horiz = horiz + 8
+        posY -= 32
+        horiz += 8
 
-    minibit = posX % 16
+    minibit = posX & 15 # Same as % 16
  
     Send2Bytes (0, 0b10000000 + posY, 0b10000000 + horiz)  # Setting the graphics address
 
@@ -1006,7 +1006,7 @@ def Plot(posX, posY, style = 1):
 
         leftByte = orignal_leva
 
-    Send2Bytes( 1, leftByte, rightByte)
+    Send2Bytes(1, leftByte, rightByte)
     mapa[horiz, posY, 0] = leftByte
     mapa[horiz, posY, 1] = rightByte
 
@@ -1015,11 +1015,11 @@ def Plot(posX, posY, style = 1):
 #==============================================================
 # 1-pixel [display/deletion/inversion] at posX coordinates (0 to 127) and posY (0 to 63)
 def MemPlot(posX, posY, style = 1):
-    horiz = int(posX / 16)
+    horiz = posX >> 4 # Same as / 16
     
     if (posY >= 32):
-        posY = posY - 32
-        horiz = horiz + 8
+        posY -= 32
+        horiz += 8
 
     minibit = posX & 15
  
@@ -1046,8 +1046,8 @@ def MemPlot(posX, posY, style = 1):
 
         leftByte = orignal_leva
 
-    changedMemPlot = mapa[horiz, posY, 0] = leftByte
-    changedMemPlot = mapa[horiz, posY, 1] = rightByte
+    mapa[horiz, posY, 0] = leftByte
+    mapa[horiz, posY, 1] = rightByte
 
 
 #==============================================================
@@ -1191,51 +1191,58 @@ def setDataPin(bit):
 # Before Strobe4 and 5, this library was using a "for x in range (4): Strobe()"
 # It was called so many times that it was taking a considerably amount of time
 # Now the code runs a little faster.
+# Using this quickSleep instead of time.sleep(0.0...1) made a 3.5s code run in 2.7s.
+# If there are artifacts in screen, add another y to the expression.
+# Leaving the last quickSleep() commented is working, but uncomment if needed.
+def quickSleep():
+    y = 1
+    x = y + y + y + y + y + y + y + y + y + y + y
+    
 def Strobe():
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    #quickSleep()
 
 def Strobe4():
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    #quickSleep()
   
 def Strobe5():
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, True)
-    time.sleep(0.0000001)
+    quickSleep()
     GPIO.output(sClk_Pin, False)
-    time.sleep(0.0000001)
+    #quickSleep()
   
 #==============================================================
 # Subprogram for sending two bytes after serial communication without interrupting between individual bytes
@@ -1251,6 +1258,7 @@ def Send2Bytes(rs, byte1, byte2):
     setDataPin(0)                # Followed by zero bit
     Strobe()
  
+    # Decomposing these next for loops didn't made the code run significantly faster.
     for i in range(7, 3, -1):         # And then top four bits from the first byte
         setDataPin(byte1 & (1 << i))    # The original code used "bit = (byte1 & (2**i)) >> i"
         Strobe()                        # I removed the "bit" var (putted the expression directly at the function)
@@ -1259,7 +1267,7 @@ def Send2Bytes(rs, byte1, byte2):
     setDataPin(0)                     # The next is the 4x "0"
     Strobe4()
 
-    for i in range(3, -1, -1):    # And then the remainder of the first byte (lower 4 bits)
+    for i in range(3, -1, -1):    
         setDataPin(byte1 & (1 << i))
         Strobe()
 
@@ -1268,7 +1276,7 @@ def Send2Bytes(rs, byte1, byte2):
 
     # Byte types were sent immediately without "head" (without 5x "1" + RW bit + RS bit + "0")
     for i in range(7, 3, -1):        # Even this kind of byte is divided into 2 parts (upper 4 bits)
-        setDataPin(byte1 & (1 << i))
+        setDataPin(byte2 & (1 << i))
         Strobe()
 
     setDataPin(0)                        # Separation sequence 4x "0"
@@ -1298,14 +1306,14 @@ def SendByte(rs,  byte):
     Strobe()
     
     for i in range(7, 3, -1):     # And then up four bits of the sent byte
-        setDataPin(byte1 & (1 << i))
+        setDataPin(byte & (1 << i))
         Strobe()
 
     setDataPin(0)                     # Then the separation sequence is sent 4x "0"
     Strobe4()
 
     for i in range(3, -1, -1):    # Followed by the rest of the data (the bottom 4 bits of the sent byte)
-        setDataPin(byte1 & (1 << i))
+        setDataPin(byte & (1 << i))
         Strobe()
 
     setDataPin(0)                      # To restart the separation sequence 4x "0"
