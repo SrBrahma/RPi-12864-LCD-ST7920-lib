@@ -892,6 +892,29 @@ def DrawGenericLine(fromX, fromY, toX, toY, style = 1):
             
 #==============================================================
 # New function.
+# Draws a rectangle. If fill, all the internal part will be painted.
+def DrawRectangle(fromX, fromY, toX, toY, fill = 0, style = 1):
+    if (fromX > toX):
+        fromX, toX = toX, fromX
+    if (fromY > toY):
+        fromY, toY = toY, fromY
+    
+    for xPos in range (fromX, toX + 1):
+        Plot(xPos, fromY, style)
+        Plot(xPos, toY, style)
+        
+    for yPos in range (fromY + 1, toY):
+        Plot(fromX, yPos, style)
+        Plot(toX, yPos, style)
+        
+    if fill:
+        for yPos in range (fromY + 1, toY):
+            for xPos in range (fromX + 1, toX):
+                Plot(xPos, yPos, style)
+        
+    
+#==============================================================
+# New function.
 # The arguments are self-explaining.
 # Increasing stepDegree increases the speed of drawing, but may result in missing pixels.
 def DrawCircle(circleCenterX, circleCenterY, radius, startDegree = 0, stopDegree = 360, stepDegree = 1, style = 1):
