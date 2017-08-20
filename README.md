@@ -16,16 +16,21 @@ I searched a lot on internet and I couldn't find a single code for my 128x64 LCD
 
 This repository is an open source project to translate it, and to improve it.
 
+
 THE LIBRARY:
+
 The library is working, almost everything is in english, and most you can understand.
 
 This new code also adds new functions, for drawing and to improve the performance of it.
 
 
 
+
 Feel free to do a Pull Request!
 
+
 CREDITS:
+
 The credits for the original code goes to the author. Thanks, Milan Krúpa (czech guy haha)!
 
 
