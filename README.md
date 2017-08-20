@@ -10,15 +10,22 @@ An english translation and improvement from this original czech code: http://www
 >(Image displayed on original website)
 
 
-I searched a lot on internet and I couldn't find a single code for my 128x64 LCD display (I was only finding OLED ones), until I found this czech site, with a working code for my LCD.
+HISTORY:
 
-
-The problem is, that it is czech.
+I searched a lot on internet and I couldn't find a single code for my 128x64 LCD display (I was only finding OLED ones), until I found this czech site, with a working code for my LCD. The problem is, that it was in czech.
 
 This repository is an open source project to translate it, and to improve it.
 
+THE LIBRARY:
 The library is working, almost everything is in english, and most you can understand.
 
+This new code also adds new functions, for drawing and to improve the performance of it.
+
+
+
+Feel free to do a Pull Request!
+
+CREDITS:
 The credits for the original code goes to the author. Thanks, Milan Krúpa (czech guy haha)!
 
-Feel free (and please, do it) to do a Pull Request!
+
