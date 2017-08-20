@@ -918,7 +918,7 @@ def DrawRectangle(fromX, fromY, toX, toY, fill = 0, style = 1):
 # The arguments are self-explaining.
 # Increasing stepDegree increases the speed of drawing, but may result in missing pixels.
 def DrawCircle(circleCenterX, circleCenterY, radius, startDegree = 0, stopDegree = 360, stepDegree = 1, style = 1):
-    for degree in range (startDegree, stopDegree + 1, stepDegree)
+    for degree in range (startDegree, stopDegree + 1, stepDegree):
         posX = int(round(math.cos(math.radians(degree)) * radius + circleCenterX))
         posY = int(round(math.sin(math.radians(degree)) * (- radius) + circleCenterY))
         Plot (posX, posY, style)
