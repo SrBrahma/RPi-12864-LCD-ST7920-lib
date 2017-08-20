@@ -31,6 +31,8 @@ Feel free to do a Pull Request!
 
 CREDITS:
 
+Translation and improvements by Henrique Bruno Fantauzzi de Almeida (it's me!)
+
 The credits for the original code goes to the author. Thanks, Milan Krúpa (czech guy haha)!
 
 
