@@ -26,76 +26,76 @@
 #
 # Note: the y position is inverted (like most (all?) displays), so the coordinate (0,0) is the top left.
 #
-# Init()
+# init()
 #   Basic GPIO port settings - just run it once at the beginning of the program
 #
-# InitTextMode()
+# initTextMode()
 #   Switches the display to text mode (display contents can not be displayed --?--)
 #
-# InitGraphicMode()
+# initGraphicMode()
 #   Switches display to graphic mode (display contents can not be displayed --?--)
 #
-# ClearText()
+# clearText()
 #   Deletes the content of the text part of the display (the graphics portion remains unchanged)
 #
-# ClearGraphic(pattern)
+# clearGraphic(pattern)
 #   Fills the entire contents of the graphical part of the display by the byte.
 #   (When 0x00 is deleted, 0xFF will fill it with white dots, other values will
 #   fill the display with different vertical lines). The text part of the display remains unchanged.
 #
-# ClearDisplay()
+# clearDisplay()
 #   Performs both previous deletions at the same time. After returning the display is switched to text mode.
 #
-# DefineIcon(iconId, iconData)
+# defineIcon(iconId, iconData)
 #   Defines one of four custom icons
 #   iconId = icon identifier number 0 to 3
 #   iconData = a variable that contains an array: 16x double-byte value
 #
-# PrintIcon(iconId, x, y)
+# printIcon(iconId, x, y)
 #   The [x, y] coordinates print one of the four custom icons.
 #   iconId = Icon identifier number 0 to 3
 #   x = column 0 to 7
 #   y = line 0 to 3
 #
 # ==== Graphic font 8x8 pixels
-#   PrintCharGraphicMode(code, x, supers, inversion)
-#     Displays one PrintCharGraphicMode with the ASCII code "code" at the "x" (0 to 15) coordinates,
+#   printCharGraphicMode(code, x, supers, inversion)
+#     Displays one printCharGraphicMode with the ASCII code "code" at the "x" (0 to 15) coordinates,
 #     posY (0 to 63) - the y position to
-#     When "inverse" = True, a dark PrintCharGraphicMode appears on a light background.
+#     When "inverse" = True, a dark printCharGraphicMode appears on a light background.
 #
-#   PrintStringGraphicMode(text, x, supers, inversion)
-#     Displays text (multiple characters) at "x" and "supers" (parameters same as "PrintCharGraphicMode ()").
+#   printStringGraphicMode(text, x, supers, inversion)
+#     Displays text (multiple characters) at "x" and "supers" (parameters same as "printCharGraphicMode ()").
 
 # ==== Inside display font
-#   PrintCharGreat(code, x, y) 	Displays one PrintCharGraphicMode in text mode at [x, y].
+#   printCharTextMode(code, x, y) 	Displays one printCharGraphicMode in text mode at [x, y].
 #     Code is in the range 1 to 127 (from 32 to 126 it is a classic ASCII)
 #     X is from 0 to 15
 #     Y is a line 0 to 3
 #
-#  PrintBigStringTextMode(string, x, y)
+#   printStringTextMode(string, x, y)
 #     Use large characters to display text on the display. Parameters are the
-#     same as for "big_set ()" and apply to the first PrintCharGraphicMode of the text.
+#     same as for "big_set ()" and apply to the first printCharGraphicMode of the text.
 #
-# Plot(posX, posY, style)
+# plot(posX, posY, style)
 #   At super pixels (0 to 127) and "posY" (0 to 63), it displays, deletes,
 #   or inverts one point. If style = 0 , point deletion is performed, 
 #   style = 1 is displayed, and style = 2 changes the point status on the display.
 #
-# MemPlot(posX, posY, style)
+# memPlot(posX, posY, style)
 #   The same function as the previous " plot () ", just the points do not
 #   appear directly on the display, but only in the temporary storage space.
 #   This feature allows faster drawing. After use, however, it is necessary to transfer
-#   the contents of that temporary memory to the display using the " MemDump () " function.
+#   the contents of that temporary memory to the display using the " memDump () " function.
 #
-# MemDump()
-#   Transfer the memory contents to the display after using the MemPlot() command.
+# memDump()
+#   Transfer the memory contents to the display after using the memPlot() command.
 #
-# DrawHorizontalLine(posY, fromX, toX, style)
+# drawHorizontalLine(posY, fromX, toX, style)
 #   Drawing a simple horizontal line at a "supery" distance from the top edge with the
 #   ability to define the beginning and end of the line (variables "from" to "to"). 
 #   The "style" parameter is the same as the " plot () " function.
 #
-# DrawHorizontalLine(posY, fromX, toX, pattern)
+# drawHorizontalLine(posY, fromX, toX, pattern)
 #   Faster drawing of the horizontal line. In this case, the parameters "fromX" and "toX"
 #   are in the range 0 to 7 (they are sixteen pixels on the display). Therefore,
 #   the line can begin and end only at the coordinates on which the icons are printed.
@@ -103,20 +103,20 @@
 #   the style of the line. Depending on the individual bits of that parameter, you can
 #   set the line full, dashed, dotted, dashed ...
 #
-# DrawVerticalLine(posX, fromY, toY, pattern)
+# drawVerticalLine(posX, fromY, toY, pattern)
 #   Vertical line at arbitrary coordinates.
 #   posX = X line coordinates in the range 0 to 127
 #   fromY, toY = y coordinates of the beginning and end of the line in the range 0 to 63
 #   The "pattern" parameter is the same as in the previous case.
 #
-# LoadBMP12864(fileName)
+# loadBMP12864(fileName)
 #   Load a two-color image from the file into the display.
 #   Beware of the correct file format!
 #
-# SendByte(rs, byte) 	Sends 1 byte to the display.
+# sendByte(rs, byte) 	Sends 1 byte to the display.
 #   The data (1) or the command (0) register is selected using the "rs" parameter.
 #
-# Send2Bytes(rs, byte1, byte2)
+# send2Bytes(rs, byte1, byte2)
 #   It sends 2 bytes at a time.
 #   The data (1) or the command (0) register is selected using the "rs" parameter.
 
@@ -125,18 +125,23 @@
 # ==== NEW FUNCTIONS! ====
 # They are not present on the original code. They aren't so complicated, but are handy.
 
-# DrawGenericLine(fromX, fromY, toX, toY, style = 1)
+# drawGenericLine(fromX, fromY, toX, toY, style = 1)
 #   Draws a line from and to the specified coordinates.
 #   Based on this code: http://itsaboutcs.blogspot.com.br/2015/04/bresenhams-line-drawing-algorithm.html
 #
-# DrawCircle(circleCenterX, circleCenterY, radius, startDegree = 0, stopDegree = 360, stepDegree = 1, style = 1):
+# drawCircle(circleCenterX, circleCenterY, radius, startDegree = 0, stopDegree = 360, stepDegree = 1, style = 1):
 #   The arguments are self-explaining.
 #   Increasing stepDegree increases the speed of drawing, but may result in missing pixels.
 #
-# DrawRadiusLine(fromX, fromY, degree, radius, style = 1):
+# drawRadiusLine(fromX, fromY, degree, radius, style = 1):
 #    Draws a line like a clock hand, where you enter the initial coordinate, the angle
 #    in degrees and the radius (the size of the line)
-
+#
+# hideShowDisplay(state)
+#    Hide all active pixels on display, but doesn't remove them from memory.
+#    If you hide them (True or any value except 0), and then show them again (False or 0),
+#    all active pixels will show again, on the same place.
+#   
 # ==============================================================
 
 
@@ -149,7 +154,7 @@
 # 3  VO                     - 
 # 4  (RS Data/Command)      - +5V (CHIP SELECT - In serial communication)
 # 5  (R/W Read/Write)       - RasPi (Serial data) - GPIO7 (pin26) 
-# 6  (E - Strobe)           - RasPi (serial CLOCK) - GPIO8 (pin24)
+# 6  (E - strobe)           - RasPi (serial CLOCK) - GPIO8 (pin24)
 # 7  (Data bit0)            - 
 # 8  (Data bit1)            - 
 # 9  (Data bit2)            - 
@@ -238,9 +243,9 @@ iconData={}         # The variable through which the graphical Icons will be def
 
 def main():
 
-    Init()              # Basic HW system setup - port directions on the expander and reset the display
-    ClearDisplay(0)     # Complete deletion of the display
-    nacist_font2("font2.txt")  # Retrieve an external font from the file
+    init()              # Basic HW system setup - port directions on the expander and reset the display
+    clearDisplay(0)     # Complete deletion of the display
+    
 
 
 
@@ -250,35 +255,35 @@ def main():
 
 
 #- - - - - - - - - Writing text to the display - - - - - - - - - - - - - - - - - - - -  
-    InitTextMode()     # Switch to text mode
+    initTextMode()     # Switch to text mode
 
-    PrintBigStringTextMode("Viewing pointer",0,0)   # Display the text in the text mode at specified coordinates
-    PrintBigStringTextMode("display",4,1)
-    PrintBigStringTextMode("in text",3,2)
-    PrintBigStringTextMode("mode",5,3)
+    printStringTextMode("Viewing pointer",0,0)   # Display the text in the text mode at specified coordinates
+    printStringTextMode("display",4,1)
+    printStringTextMode("in text",3,2)
+    printStringTextMode("mode",5,3)
 
     time.sleep(2)
-    PrintBigStringTextMode("chr(1)...chr(32)", 0 , 1)
+    printStringTextMode("chr(1)...chr(32)", 0 , 1)
     charCode = 0
     for r in range(2, 4):
         for s in range (16):
             charCode = charCode + 1
-            PrintCharGreat(charCode, s, r)   # PrintCharGraphicMode display in text mode according to its (ASCII) code
+            printCharTextMode(charCode, s, r)   # printCharGraphicMode display in text mode according to its (ASCII) code
     time.sleep(3)
     
-    PrintBigStringTextMode("chr(33)..chr(64)", 0, 1)
+    printStringTextMode("chr(33)..chr(64)", 0, 1)
     for r in range(2, 4):
         for s in range (16):
             charCode = charCode + 1
-            PrintCharGreat(charCode, s, r)
+            printCharTextMode(charCode, s, r)
          
 
     time.sleep(3)
-    ClearText()               # Delete the text part of the display
+    clearText()               # Delete the text part of the display
     time.sleep(1)
 
 #- - - - - - - - - Icons - - - - - - - - - - - - - - - - - - - -  
-    PrintBigStringTextMode("Own Icons", 0, 0)
+    printStringTextMode("Own Icons", 0, 0)
  
  
     # Definition of a zig-zag form of 4 own icons:
@@ -299,7 +304,7 @@ def main():
     iconData[13] =  0b1110000110000111
     iconData[14] =  0b0111111111111110
     iconData[15] =  0b0011111111111100
-    DefineIcon(0, iconData)
+    defineIcon(0, iconData)
 
     # Second user-defined icon (square with crash)
     iconData[0]  =  0b1111111111111111
@@ -318,7 +323,7 @@ def main():
     iconData[13] =  0b1110000000000111
     iconData[14] =  0b1111111111111111
     iconData[15] =  0b1111111111111111
-    DefineIcon(1, iconData)
+    defineIcon(1, iconData)
 
 
     # Third user-defined icon (empty square)
@@ -338,7 +343,7 @@ def main():
     iconData[13] =  0b1100000000000011
     iconData[14] =  0b1111111111111111
     iconData[15] =  0b1111111111111111
-    DefineIcon(2, iconData) 
+    defineIcon(2, iconData) 
     
     # Fourth user-defined icon (crisis in a circle)
     iconData[0]  =  0b0000011111100000
@@ -357,31 +362,31 @@ def main():
     iconData[13] =  0b0011000110001100
     iconData[14] =  0b0000100110010000
     iconData[15] =  0b0000011111100000
-    DefineIcon(3, iconData) 
+    defineIcon(3, iconData) 
 
-    PrintIcon(1, 0, 1)    # Icon c.2 at the top of the second row from the top
+    printIcon(1, 0, 1)    # Icon c.2 at the top of the second row from the top
     for icon in range (7):  # The rest of the row is filled with random icons  
         # When you print the icons for yourself, you do not have to set positions for each
         icon = random.randint(0, 3) * 2 # The last parameter is double the number of Icons
-        Send2Bytes(1, 0,icon)    
+        send2Bytes(1, 0,icon)    
 
-    PrintIcon(2, 0, 2)    # Icon c.3 at the top of the third row from above
+    printIcon(2, 0, 2)    # Icon c.3 at the top of the third row from above
     for icon in range (7):  # The rest of the row is filled with random icons
         # When you print the icons for yourself, you do not have to set positions for each
         icon = random.randint(0, 3) * 2 # The last parameter is the double-pin number Icons
-        Send2Bytes(1, 0, icon)    
+        send2Bytes(1, 0, icon)    
 
-    PrintIcon(3, 0, 3)    # Icon c.4 at the bottom of the bottom row
+    printIcon(3, 0, 3)    # Icon c.4 at the bottom of the bottom row
     for icon in range (7):  # The rest of the lines are filled with c.4
         # When you print the icons for yourself, you do not have to set positions for each
-        Send2Bytes(1, 0, 6)    # (6 = icon c.4)    
+        send2Bytes(1, 0, 6)    # (6 = icon c.4)    
 
 
 
     time.sleep(2)
-    PrintBigStringTextMode("Change of definition", 0, 0)
+    printStringTextMode("Change of definition", 0, 0)
     time.sleep(2)
-    PrintBigStringTextMode(" Fourth Icons ", 0 , 0)
+    printStringTextMode(" Fourth Icons ", 0 , 0)
     time.sleep(2)
 
     
@@ -403,63 +408,63 @@ def main():
     iconData[13] =  0b0000111100001111
     iconData[14] =  0b0000111100001111
     iconData[15] =  0b0000111100001111
-    DefineIcon(3, iconData) 
+    defineIcon(3, iconData) 
  
     time.sleep(3)
-    ClearText()
+    clearText()
     
 #- - - - - - - - -Cinske charactery - - - - - - - - - - - - - - - -  
-    PrintBigStringTextMode("   Like Icons   " , 0 , 0)
-    PrintBigStringTextMode("  Are displayed  " , 0 , 1)
-    PrintBigStringTextMode(" And Czech chars " , 0 , 2)
+    printStringTextMode("   Like Icons   " , 0 , 0)
+    printStringTextMode("  Are displayed  " , 0 , 1)
+    printStringTextMode(" And Czech chars " , 0 , 2)
     time.sleep(3)
-    ClearText()
+    clearText()
 
     # Print CINSTINY --["nothing"?]-- with 16x16 point font (in text mode)
     # These are just randomly chosen charters (nothing to me --nerika--)
-    # PrintCharGraphicMode is selected with the help of the last two functions "Send2Bytes()"
+    # printCharGraphicMode is selected with the help of the last two functions "send2Bytes()"
     # The first of these two numbers must be higher than 127
 
-    SetIconPos(2, 0)                       # Setting the first PrintCharGraphicMode position [0,0] to [7,3]
-    Send2Bytes(1, 200, 150)   
-    Send2Bytes(1, 218, 10)
-    Send2Bytes(1, 128, 1)
-    Send2Bytes(1, 211, 200)
+    setIconPos(2, 0)                       # Setting the first printCharGraphicMode position [0,0] to [7,3]
+    send2Bytes(1, 200, 150)   
+    send2Bytes(1, 218, 10)
+    send2Bytes(1, 128, 1)
+    send2Bytes(1, 211, 200)
 
-    SetIconPos(4, 2)                       # nastaveni pozice prvniho characteru [0,0] az [7,3]
-    Send2Bytes(1, 240, 4)   
-    Send2Bytes(1, 240, 33)
-    Send2Bytes(1, 240, 222)
+    setIconPos(4, 2)                       # nastaveni pozice prvniho characteru [0,0] az [7,3]
+    send2Bytes(1, 240, 4)   
+    send2Bytes(1, 240, 33)
+    send2Bytes(1, 240, 222)
 
     # Vertical four-letter writing
-    SetIconPos(0, 0)                       # PrintCharGraphicMode position setting
-    Send2Bytes(1, 128, 18)   
-    SetIconPos(0, 1)                       # PrintCharGraphicMode position setting 
-    Send2Bytes(1, 154, 251)
-    SetIconPos(0, 2)                       # PrintCharGraphicMode position setting 
-    Send2Bytes(1, 197, 37)
-    SetIconPos(0, 3)                       # PrintCharGraphicMode position setting 
-    Send2Bytes(1, 141, 90)
+    setIconPos(0, 0)                       # printCharGraphicMode position setting
+    send2Bytes(1, 128, 18)   
+    setIconPos(0, 1)                       # printCharGraphicMode position setting 
+    send2Bytes(1, 154, 251)
+    setIconPos(0, 2)                       # printCharGraphicMode position setting 
+    send2Bytes(1, 197, 37)
+    setIconPos(0, 3)                       # printCharGraphicMode position setting 
+    send2Bytes(1, 141, 90)
 
 
     time.sleep(3)
-    ClearText()
+    clearText()
 
 
 #- - - - - - - - -  Text in the graphics mode - - - - - - - - - - - - - - - - - - -  
 # Print 8x8 dot font (in graphic mode)
 
-    InitGraphicMode()
-    PrintStringGraphicMode("The display is y", 0,  0, False)  # Normal graphic on the top row
-    PrintStringGraphicMode("operate",          3, 15, False)        
-    PrintStringGraphicMode("also in graphics", 1, 30, False) 
-    PrintStringGraphicMode("mode",             5, 45, False)  
+    initGraphicMode()
+    printStringGraphicMode("The display is y", 0,  0, False)  # Normal graphic on the top row
+    printStringGraphicMode("operate",          3, 15, False)        
+    printStringGraphicMode("also in graphics", 1, 30, False) 
+    printStringGraphicMode("mode",             5, 45, False)  
 
     time.sleep(2)
-    PrintStringGraphicMode("graphics", 5, 30, True)  # Inversely rewritten text  
+    printStringGraphicMode("graphics", 5, 30, True)  # Inversely rewritten text  
 
     time.sleep(3)
-    ClearGraphic()    # Delete the graphical parts of the display
+    clearGraphic()    # Delete the graphical parts of the display
 
 
     # In the same mode, y print individual characters according to their code
@@ -471,119 +476,119 @@ def main():
         else:
             invert = False
             
-        PrintCharGraphicMode(code, column, row, invert) # PrintCharGraphicMode subroutine in graphics mode
+        printCharGraphicMode(code, column, row, invert) # printCharGraphicMode subroutine in graphics mode
 
     time.sleep(2)
-    ClearGraphic()
+    clearGraphic()
 
     for code in range(128, 256):
         column = (code - 128) % 16
         row = int((code - 128) / 16) * 8 
-        PrintCharGraphicMode(code, column, row, False)
+        printCharGraphicMode(code, column, row, False)
 
     time.sleep(2)
-    ClearGraphic()
+    clearGraphic()
 
 
 #- - - - - - - Point printing and car - - - - - - - - - - - - - - - - - -  
 
-    PrintStringGraphicMode("In this mode",         0,  2,False)  # Normal writing 2 pixels from the top edge
-    PrintStringGraphicMode("Is y to draw",         0, 11,False)        
-    PrintStringGraphicMode("Points and line",      0, 20, False) 
+    printStringGraphicMode("In this mode",         0,  2,False)  # Normal writing 2 pixels from the top edge
+    printStringGraphicMode("Is y to draw",         0, 11,False)        
+    printStringGraphicMode("Points and line",      0, 20, False) 
 
     # Oramovani --[Window?]-- display with full car
-    DrawHorizontalLine (  0, 0, 127, 1)          # Horizontal line at any position
-    DrawHorizontalLine2( 63, 0,   7, 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
-    DrawVerticalLine (  0, 0,  63, 0b11111111) # Vertical line in any position with mask setting
-    DrawVerticalLine (127, 0,  63, 0b11111111)
+    drawHorizontalLine (  0, 0, 127, 1)          # Horizontal line at any position
+    drawHorizontalLine2( 63, 0,   7, 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
+    drawVerticalLine (  0, 0,  63, 0b11111111) # Vertical line in any position with mask setting
+    drawVerticalLine (127, 0,  63, 0b11111111)
 
     # Internal small rectangle with a carcass
-    DrawHorizontalLine2(31, 1,  6, 0b11001100)
-    DrawHorizontalLine2(56, 1,  6, 0b11001100)
-    DrawVerticalLine ( 16, 31, 56, 0b11001100)
-    DrawVerticalLine (111, 31, 56, 0b11001100)
+    drawHorizontalLine2(31, 1,  6, 0b11001100)
+    drawHorizontalLine2(56, 1,  6, 0b11001100)
+    drawVerticalLine ( 16, 31, 56, 0b11001100)
+    drawVerticalLine (111, 31, 56, 0b11001100)
 
 
     # Randomly popping a point into a small rectangle in inverse mode
     for i in range(2000):
         x= int(random.randint(17, 110))
         y= int(random.randint(32, 55))
-        Plot(x, y, 2)   # Print an inverse point at the coordinates [x, y]
+        plot(x, y, 2)   # Print an inverse point at the coordinates [x, y]
 
 
 #- - - - - - - - - - - - Different styles of --horizontalnich-- cars - - - - - - - - - - - - - - - - -  
-    ClearGraphic()
+    clearGraphic()
 
-    DrawHorizontalLine2( 0, 2, 5, 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
-    DrawHorizontalLine2(10, 3, 4, 0b11001100) # Speed mountains. Line in a 16-column raster with mask setting
-    DrawHorizontalLine2(20, 2, 5, 0b11110000) # Speed mountains. Line in a 16-column raster with mask setting
-    DrawHorizontalLine2(30, 1, 6, 0b10101010) # Speed mountains. Line in a 16-column raster with mask setting
-    DrawHorizontalLine2(40, 0, 7, 0b11110101) # Speed mountains. Line in a 16-column raster with mask setting
-    DrawHorizontalLine2(50, 1, 6, 0b01110101) # Speed mountains. Line in a 16-column raster with mask setting
+    drawHorizontalLine2( 0, 2, 5, 0b11111111) # Speed mountains. Line in a 16-column raster with mask setting
+    drawHorizontalLine2(10, 3, 4, 0b11001100) # Speed mountains. Line in a 16-column raster with mask setting
+    drawHorizontalLine2(20, 2, 5, 0b11110000) # Speed mountains. Line in a 16-column raster with mask setting
+    drawHorizontalLine2(30, 1, 6, 0b10101010) # Speed mountains. Line in a 16-column raster with mask setting
+    drawHorizontalLine2(40, 0, 7, 0b11110101) # Speed mountains. Line in a 16-column raster with mask setting
+    drawHorizontalLine2(50, 1, 6, 0b01110101) # Speed mountains. Line in a 16-column raster with mask setting
 
     time.sleep(3)
 
-    ClearGraphic(0xff)    # To fill the screen with white ink
+    clearGraphic(0xff)    # To fill the screen with white ink
 
 #- - - - - - - - - - drawing - - - - - - - - - - - - - - - - - - - -  
     # Draw a double circle using the first print point on the display (slowly)
     for circle in range(0, 6283, 4):
         x = int(((math.sin(circle / 1000.0) * 30.0)) + 32)
         y = int(((math.cos(circle / 1000.0) * 30.0)) + 32)
-        Plot(x, y, 0)
+        plot(x, y, 0)
         x = int(((math.sin(circle / 1000.0) * 20.0)) + 32)
         y = int(((math.cos(circle / 1000.0) * 20.0)) + 32)
-        Plot(x, y, 0)
+        plot(x, y, 0)
 
     # Draw five of the circles using the memo
     # And then swipe the memory to the display (fast)
     for circle in range(0, 6283, 4):
         x = int(((math.sin(circle / 1000.0) * 30.0)) + 96)
         y = int(((math.cos(circle / 1000.0) * 30.0)) + 32)
-        MemPlot(x, y, 0)
+        memPlot(x, y, 0)
         x = int(((math.sin(circle / 1000.0) * 25.0)) + 96)
         y = int(((math.cos(circle / 1000.0) * 25.0)) + 32)
-        MemPlot(x, y, 0)
+        memPlot(x, y, 0)
         x = int(((math.sin(circle / 1000.0) * 20.0)) + 96)
         y = int(((math.cos(circle / 1000.0) * 20.0)) + 32)
-        MemPlot(x, y, 0)
+        memPlot(x, y, 0)
         x = int(((math.sin(circle / 1000.0) * 15.0)) + 96)
         y = int(((math.cos(circle / 1000.0) * 15.0)) + 32)
-        MemPlot(x, y, 0)
+        memPlot(x, y, 0)
         x = int(((math.sin(circle / 1000.0) * 10.0)) + 96)
         y = int(((math.cos(circle / 1000.0) * 10.0)) + 32)
-        MemPlot(x, y, 0)
+        memPlot(x, y, 0)
 
-    MemDump()    # Spraying data from memory to display
+    memDump()    # Spraying data from memory to display
 
 
 
     time.sleep(2)
-    ClearGraphic()
+    clearGraphic()
 
 #- - - - - - - - - - Overwrite text and graphic mode - - - - - - - - - -  
 
-    PrintStringGraphicMode("     Graphic    ",  0,  0, False)
-    PrintStringGraphicMode("  And text mode ", 0, 10, False) 
-    PrintStringGraphicMode("    Y is used   ",     0, 20, False) 
-    PrintStringGraphicMode("  In particular ", 0, 30, False) 
+    printStringGraphicMode("     Graphic    ",  0,  0, False)
+    printStringGraphicMode("  And text mode ", 0, 10, False) 
+    printStringGraphicMode("    Y is used   ",     0, 20, False) 
+    printStringGraphicMode("  In particular ", 0, 30, False) 
 
     time.sleep(2)
-    ClearGraphic()
+    clearGraphic()
  
-    InitTextMode()      # Switch the display to text mode
-    PrintBigStringTextMode("Big writing", 2, 0)
-    PrintBigStringTextMode("  In text  ", 3, 1)
-    PrintBigStringTextMode("    mode   ", 5, 2)
-    PrintIcon(1, 0, 2)
-    PrintIcon(1, 7, 2)  
+    initTextMode()      # Switch the display to text mode
+    printStringTextMode("Big writing", 2, 0)
+    printStringTextMode("  In text  ", 3, 1)
+    printStringTextMode("    mode   ", 5, 2)
+    printIcon(1, 0, 2)
+    printIcon(1, 7, 2)  
 
 
     time.sleep(2)
 
-    InitGraphicMode()  # Switch display to graphic mode
-    DrawHorizontalLine2(53, 0, 7, 0b10011001) 
-    PrintStringGraphicMode("Graphic row", 1, 56, False)   
+    initGraphicMode()  # Switch display to graphic mode
+    drawHorizontalLine2(53, 0, 7, 0b10011001) 
+    printStringGraphicMode("Graphic row", 1, 56, False)   
 
 
     
@@ -591,55 +596,55 @@ def main():
     # Example: 4 points thick sikma line over the entire screen
 
     for x in range(128):
-        Plot(x ,x/2     , 1)
-        Plot(x,(x/2) + 1, 1)
-        Plot(x,(x/2) + 2, 1)
-        Plot(x,(x/2) + 3, 1)
+        plot(x ,x/2     , 1)
+        plot(x,(x/2) + 1, 1)
+        plot(x,(x/2) + 2, 1)
+        plot(x,(x/2) + 3, 1)
 
     time.sleep(2)
-    PrintStringGraphicMode("Delete graphics", 0, 56, True)   
+    printStringGraphicMode("Delete graphics", 0, 56, True)   
 
     time.sleep(2)
-    ClearGraphic()   # The graphic is deleted separately, so the original text remains
+    clearGraphic()   # The graphic is deleted separately, so the original text remains
 
-    PrintStringGraphicMode("The text remains", 0, 56, True)   
+    printStringGraphicMode("The text remains", 0, 56, True)   
     time.sleep(2)
-    PrintStringGraphicMode("Make a line ", 0, 56, True)   
+    printStringGraphicMode("Make a line ", 0, 56, True)   
 
     for x in range(128):
-        Plot(127-x ,x/2     , 1)
-        Plot(127-x,(x/2) + 1, 1)
-        Plot(127-x,(x/2) + 2, 1)
-        Plot(127-x,(x/2) + 3, 1)
+        plot(127-x ,x/2     , 1)
+        plot(127-x,(x/2) + 1, 1)
+        plot(127-x,(x/2) + 2, 1)
+        plot(127-x,(x/2) + 3, 1)
 
     time.sleep(2)
-    PrintStringGraphicMode(" Delete text ", 0, 56, True)   
+    printStringGraphicMode(" Delete text ", 0, 56, True)   
     time.sleep(1)
 
-    ClearText()                # The display will be deleted separately
-    InitGraphicMode()
-    MemDump()                # graphic se ale v tom pripade musi obnovit z pameti
+    clearText()                # The display will be deleted separately
+    initGraphicMode()
+    memDump()                # graphic se ale v tom pripade musi obnovit z pameti
     
     time.sleep(1)
-    PrintStringGraphicMode("Graphic remains", 0, 56, True)   
+    printStringGraphicMode("Graphic remains", 0, 56, True)   
     time.sleep(2)
-    ClearGraphic()
+    clearGraphic()
 
 #- - - - - - - - - nahrani obrazku - - - - - - - - - - - - - - - - - -  
 
-    PrintStringGraphicMode("   display    " ,0,  0,False)  # 
-    PrintStringGraphicMode("     file     " ,0, 10,False)  # 
-    PrintStringGraphicMode(" with a image " ,0, 20,False)  # 
+    printStringGraphicMode("   display    " ,0,  0,False)  # 
+    printStringGraphicMode("     file     " ,0, 10,False)  # 
+    printStringGraphicMode(" with a image " ,0, 20,False)  # 
     time.sleep(2)
-    LoadBMP12864("./pokladnik.bmp")  # Upload bitmaps of 128x64 pixels on the display 
+    loadBMP12864("./pokladnik.bmp")  # Upload bitmaps of 128x64 pixels on the display 
 
     time.sleep(4)
 
     # Fill the display with vertical lines (pattern = 0b10101010)
-    ClearDisplay(0b10101010) # The ClearDisplay () function remains in the text mode
-    InitGraphicMode()       # So you have to switch it to the graphical mode before the next graphic function
+    clearDisplay(0b10101010) # The clearDisplay () function remains in the text mode
+    initGraphicMode()       # So you have to switch it to the graphical mode before the next graphic function
 
-    PrintStringGraphicMode("END OF EXAXMPLES :)" , 2 , 25 , True)   
+    printStringGraphicMode("END OF EXAXMPLES :)" , 2 , 25 , True)   
  
     exit(0)
 
@@ -656,13 +661,13 @@ def main():
 # One of the 4 defined 16 x 16 pixel icons at position [x, y]
 # X is in the range 0 to 7 (translated to 0, 16, 32, 48, 64, 80, 96, 112)
 # Y ranges from 0 to 3 (translated to 0, 16, 32, 48)
-def PrintIcon(iconId, x, y):
+def printIcon(iconId, x, y):
     shift = x
     if (y == 1): shift = shift + 16
     if (y == 2): shift = shift + 8
     if (y == 3): shift = shift + 24
-    SendByte(0, 0b10000000 + shift)  # Address Counter to the required position
-    Send2Bytes(1, 0, iconId * 2)
+    sendByte(0, 0b10000000 + shift)  # Address Counter to the required position
+    send2Bytes(1, 0, iconId * 2)
 
 
 
@@ -672,59 +677,66 @@ def PrintIcon(iconId, x, y):
 
 #==============================================================
 # Draw a horizontal line point by point
-def DrawHorizontalLine(posY, fromX = 0, toX=127, style = 1):  
+def drawHorizontalLine(posY, fromX = 0, toX=127, style = 1):  
     for posX in range(fromX, toX + 1):
-        Plot(posX, posY, style)
+        plot(posX, posY, style)
 
 
 #==============================================================
 # Draw horizontal line from the edge to the edge after the bytes
-def DrawHorizontalLine2(posY = 0, fromByte = 0, toByte = 5, pattern = 0b11111111):  
+def drawHorizontalLine2(posY = 0, fromByte = 0, toByte = 5, pattern = 0b11111111):  
     shift = fromByte
     if (posY >= 32):
         posY = posY - 32
         shift = shift + 8     
 
-    Send2Bytes( 0, 0b10000000 + posY, 0b10000000 + shift )     
+    send2Bytes( 0, 0b10000000 + posY, 0b10000000 + shift )     
     for r in range(toByte - fromByte + 1):
-        Send2Bytes(1, pattern, pattern)     
+        send2Bytes(1, pattern, pattern)     
         mapa[shift + r, posY, 0] = pattern 
         mapa[shift + r, posY, 1] = pattern 
     
     
 #==============================================================
 # Draw a vertical line using bit masks
-def DrawVerticalLine(posX, fromY = 0, toY = 63, pattern = 255):  
-    poz_pat = 0                              # The bit position in the pattern
+# NOTICE: if given a pattern != 255 and if style == 2, style = 1.
+def drawVerticalLine(posX, fromY = 0, toY = 63, style = 1, pattern = 255):  
+    bitSelector = 0                              # The bit position in the pattern
+    pixelStyle = style                # Gives it the style value, as plot uses the pixelStyle var.
     for posY in range(fromY , toY + 1):
-        maska = (0b10000000 >> (poz_pat % 8))  # According to the given pattern, selects individual bits
-        bitpat = pattern & maska
-        if (bitpat == 0):                      # Which will either be displayed or deleted on the display
-            style = 0
-        else:
-            style = 1
-
-        Plot(posX, posY, style)
-        poz_pat = poz_pat + 1
+        if (pattern != 255):
+            bitValue = pattern & (0b10000000 >> (bitSelector % 8))  # According to the given pattern, selects individual bits
+                                                                    # Which will either be displayed or deleted on the display
+            if (bitValue == 0):                      
+                pixelStyle = 0
+            else:
+                pixelStyle = 1
+                
+            if (style == 0):  # inverts the pixelStyle if the style is == 0 (delete)
+                pixelStyle = not pixelStyle
+            bitSelector = bitSelector + 1
+            
+        plot(posX, posY, pixelStyle)
+        
 
 
 #==============================================================
-# Displaying one PrintCharGraphicMode from the 8x8 point font
-# bytePosX = x PrintCharGraphicMode position (0 to 15, translated to multiples of 8 up to 128), posY = 0 to 63
-def PrintCharGraphicMode(ascii8bitCode, bytePosX, posY , invert = False):  
+# Displaying one printCharGraphicMode from the 8x8 point font
+# bytePosX = x printCharGraphicMode position (0 to 15, translated to multiples of 8 up to 128), posY = 0 to 63
+def printCharGraphicMode(ascii8bitCode, bytePosX, posY , invert = False):  
 
     # Control of lightning parameters and their possible override at the limit
-    if (ascii8bitCode    <  32): ascii8bitCode = 32
-    if (ascii8bitCode    > 255): ascii8bitCode = 255
-    if (bytePosX   <   0): bytePosX = 0  
-    if (bytePosX   >  15): bytePosX = 15  
-    if (posY >  63): posY = 63
-    if (posY <   0): posY = 0
+    if (ascii8bitCode <  32): ascii8bitCode = 32
+    if (ascii8bitCode > 255): ascii8bitCode = 255
+    if (bytePosX <  0): bytePosX = 0  
+    if (bytePosX > 15): bytePosX = 15  
+    if (posY > 63): posY = 63
+    if (posY <  0): posY = 0
 
-    ascii8bitCode = ascii8bitCode - 32     # In the font file, the space with the 32 code is defined as the first PrintCharGraphicMode
+    ascii8bitCode = ascii8bitCode - 32     # In the font file, the space with the 32 code is defined as the first printCharGraphicMode
     posX = bytePosX * 8
 
-    # The font of the PrintCharGraphicMode from the font will be gradually transferred to the byte byte display in 8 steps (top down)
+    # The font of the printCharGraphicMode from the font will be gradually transferred to the byte byte display in 8 steps (top down)
     for adr_font in range(ascii8bitCode * 8, (ascii8bitCode * 8) + 8):
 
         # Calculate the horizontal and vertical addresses in the display memory
@@ -736,7 +748,7 @@ def PrintCharGraphicMode(ascii8bitCode, bytePosX, posY , invert = False):
     
         minibit = posX % 16     # The position of the bit to work with, in the double-bin
      
-        Send2Bytes(0, 0b10000000 + dis_adr_y, 0b10000000 + horiz)  # Setting the graphics address
+        send2Bytes(0, 0b10000000 + dis_adr_y, 0b10000000 + horiz)  # Setting the graphics address
     
         orignal_leva  = mapa[horiz,dis_adr_y, 0]  # To find out the current status of the two-byte on the display
         orignal_prava = mapa[horiz,dis_adr_y, 1]
@@ -757,7 +769,7 @@ def PrintCharGraphicMode(ascii8bitCode, bytePosX, posY , invert = False):
 
             leftByte = orignal_leva     # The left byte of the two-bit will be unchanged
     
-        Send2Bytes(1, leftByte, rightByte)       # Prepress the two bytes to enter the address in the display
+        send2Bytes(1, leftByte, rightByte)       # Prepress the two bytes to enter the address in the display
         mapa[horiz, dis_adr_y, 0] = leftByte        # The same value remembers the variable map []
         mapa[horiz, dis_adr_y, 1] = rightByte
 
@@ -767,22 +779,23 @@ def PrintCharGraphicMode(ascii8bitCode, bytePosX, posY , invert = False):
 
 #==============================================================
 # Displaying several characters behind the 8x8 font
-# bytePosX = the position of the first PrintCharGraphicMode in the text is in column 0 to 15; posY = 0 to 63 (upper margin of the PrintCharGraphicMode)
-def PrintStringGraphicMode(string, bytePosX, posY, invert = False):  
+# bytePosX = the position of the first printCharGraphicMode in the text is in column 0 to 15; posY = 0 to 63 (upper margin of the printCharGraphicMode)
+def printStringGraphicMode(string, bytePosX, posY, invert = False):  
 
     if (isinstance(string, unicode) == False):   # If the string is not in unicode, then transfer it
         string = unicode(string, "utf-8")          # Convert string from UTF-8 to unicode
 
-    # All the string scroll PrintCharGraphicMode after PrintCharGraphicMode and print
-    for zn in range (len(string)):
+    # All the string scroll printCharGraphicMode after printCharGraphicMode and print
+    for letter in range (len(string)):
         if (bytePosX < 16): # Screen overlay
-            if (ord(string[zn:zn + 1]) > 127):   # As for the ASCII PrintCharGraphicMode, proceed as described in the table above
+            if (ord(string[letter:letter + 1]) > 127):   # As for the ASCII printCharGraphicMode, proceed as described in the table above
                 try:                    # If there is no special code defined in the table, ...
-                    PrintCharGraphicMode(cz2[ord(string[zn:zn + 1])], bytePosX, posY, invert)
+                    printCharGraphicMode(cz2[ord(string[letter:letter + 1])], bytePosX, posY, invert)
                 except:                 # ... the program will terminate the error of the non-existent index of the variable cz2 [].
-                    PrintCharGraphicMode(164, bytePosX, posY, invert)  # In this case, replace the undefined PrintCharGraphicMode PrintCharGraphicMode "wheel with teckama"
+                    printCharGraphicMode(164, bytePosX, posY, invert)  # In this case, replace the undefined printCharGraphicMode printCharGraphicMode "wheel with teckama"
+                    
             else:
-                PrintCharGraphicMode(ord(string[zn:zn + 1]), bytePosX, posY, invert) # ASCII charactery tisknout normalne
+                printCharGraphicMode(ord(string[letter:letter + 1]), bytePosX, posY, invert) # ASCII charactery tisknout normalne
             bytePosX = bytePosX + 1
 
 
@@ -791,10 +804,20 @@ def PrintStringGraphicMode(string, bytePosX, posY, invert = False):
 
 #==============================================================
 # Load 8x8 point font from file to list "font2 []"
-def nacist_font2(fileName):
-
-    fullPathFileName = os.path.join(os.path.dirname(os.path.realpath('__file__')), fileName)
-    print (fullPathFileName)
+def loadTextFont(fileName):
+    # Here are two ways to get the font.txt file path. I will leave them there
+    # for future referencies to myself. You can take them as lessons :)
+    #
+    # asbolute path relative to the program caller' path
+    # fullPathFileName = os.path.join(os.path.dirname(os.path.realpath('__file__')), fileName)
+    
+    # absolute path relative to this library path  (https://stackoverflow.com/a/25612797)
+    script_path = os.path.abspath(__file__) # i.e. /path/to/dir/foobar.py
+    script_dir = os.path.split(script_path)[0] #i.e. /path/to/dir/
+    fullPathFileName = os.path.join(script_dir, fileName)
+    
+    # print (fullPathFileName)
+    
     fontfile = open(fullPathFileName, "r")
     adresafontu = 0
     for row in fontfile:
@@ -811,24 +834,24 @@ def nacist_font2(fileName):
 # Font definition is a part of the ROM in the display - therefore not Czech characters
 # bytePosX = Initial column where the string will begin to print [0 to 16]
 # Row is in the range [0 to 3]
-def PrintBigStringTextMode(string, column, row): 
+def printStringTextMode(string, column, row): 
 
     if (len(string) + column > 16):    # If the line is longer than 16 characters,
         string = string[0:16 - column]  # ... so the end is cut off
  
-    SetTextCursorPos(column, row)     # The start position of the text is sent to the display
-    for PrintCharGraphicMode in range(len(string)):
-        SendByte(1, ord(string[PrintCharGraphicMode:PrintCharGraphicMode+1]))  # Characters from the text are gradually streaked into the display
-        pomtext = txtmapa[row][:column + PrintCharGraphicMode] + string[PrintCharGraphicMode:PrintCharGraphicMode + 1] + txtmapa[row][column+PrintCharGraphicMode+1:]
+    setTextCursorPos(column, row)     # The start position of the text is sent to the display
+    for printCharGraphicMode in range(len(string)):
+        sendByte(1, ord(string[printCharGraphicMode:printCharGraphicMode+1]))  # Characters from the text are gradually streaked into the display
+        pomtext = txtmapa[row][:column + printCharGraphicMode] + string[printCharGraphicMode:printCharGraphicMode + 1] + txtmapa[row][column+printCharGraphicMode+1:]
         txtmapa[row] = pomtext            # Memory for text mode
 
 
 
 #==============================================================
-# Single PrintCharGraphicMode display in text mode
-def PrintCharGreat(code, bytePosX, row): 
-    SetTextCursorPos(bytePosX, row)  # The start position of the text is sent to the display
-    SendByte(1, code)                # The PrintCharGraphicMode code is sent to the display
+# Single printCharGraphicMode display in text mode
+def printCharTextMode(code, bytePosX, row): 
+    setTextCursorPos(bytePosX, row)  # The start position of the text is sent to the display
+    sendByte(1, code)                # The printCharGraphicMode code is sent to the display
     pomtext = txtmapa[row][:bytePosX] + chr(code) + txtmapa[row][bytePosX + 1:]
     txtmapa[row] = pomtext           # Memory for text mode
 
@@ -837,24 +860,24 @@ def PrintCharGreat(code, bytePosX, row):
 #==============================================================
 # Print position setting for text mode (for characters 8x16 point)
 # Column (0 to 15) and line (0 to 3)
-def SetTextCursorPos(column , row):  
+def setTextCursorPos(column , row):  
     shift = column
     if (row == 1): shift = column + 32
     if (row == 2): shift = column + 16
     if (row == 3): shift = column + 48
 
-    SendByte( 0, 0b10000000 + int(shift / 2))  # Address Counter na pozadovanou pozici
+    sendByte( 0, 0b10000000 + int(shift / 2))  # Address Counter na pozadovanou pozici
 
-    # In the case of --lichen-- columns, the PrintCharGraphicMode must be filled in with the PrintCharGraphicMode on the display before the new printout
+    # In the case of --lichen-- columns, the printCharGraphicMode must be filled in with the printCharGraphicMode on the display before the new printout
     if (column / 2.0 != column / 2):
         orignal_predcharacter = txtmapa[row][column - 1:column] # "Predcharacter" is determined from the auxiliary text memory
-        SendByte(1, ord(orignal_predcharacter)) 
+        sendByte(1, ord(orignal_predcharacter)) 
 
 #==============================================================
 # New function.
 # Draws a line from and to the specified coordinates.
 # Based on this code: http://itsaboutcs.blogspot.com.br/2015/04/bresenhams-line-drawing-algorithm.html
-def DrawGenericLine(fromX, fromY, toX, toY, style = 1):
+def drawGenericLine(fromX, fromY, toX, toY, style = 1):
     # Bresenham Line Drawing Algorithm For All Kind Of Slopes Of Line
     dx = abs(fromX - toX)
     dy = abs(toY - fromY)
@@ -863,7 +886,7 @@ def DrawGenericLine(fromX, fromY, toX, toY, style = 1):
     
     x, y = fromX, fromY   
 
-    Plot(x, y, style)
+    plot(x, y, style)
     
     # checking the slope if slope > 1 
     # then interchange the role of x and y
@@ -885,57 +908,57 @@ def DrawGenericLine(fromX, fromY, toX, toY, style = 1):
  
         x = x + 1 if x < toX else x - 1
         if inverted:
-            Plot(y, x, style)
+            plot(y, x, style)
             
         else:
-            Plot(x, y, style)
+            plot(x, y, style)
             
 #==============================================================
 # New function.
 # Draws a rectangle. If fill, all the internal part will be painted.
-def DrawRectangle(fromX, fromY, toX, toY, fill = 0, style = 1):
+def drawRectangle(fromX, fromY, toX, toY, fill = 0, style = 1):
     if (fromX > toX):
         fromX, toX = toX, fromX
     if (fromY > toY):
         fromY, toY = toY, fromY
     
     for xPos in range (fromX, toX + 1):
-        Plot(xPos, fromY, style)
-        Plot(xPos, toY, style)
+        plot(xPos, fromY, style)
+        plot(xPos, toY, style)
         
     for yPos in range (fromY + 1, toY):
-        Plot(fromX, yPos, style)
-        Plot(toX, yPos, style)
+        plot(fromX, yPos, style)
+        plot(toX, yPos, style)
         
     if fill:
         for yPos in range (fromY + 1, toY):
             for xPos in range (fromX + 1, toX):
-                Plot(xPos, yPos, style)
+                plot(xPos, yPos, style)
         
     
 #==============================================================
 # New function.
 # The arguments are self-explaining.
 # Increasing stepDegree increases the speed of drawing, but may result in missing pixels.
-def DrawCircle(circleCenterX, circleCenterY, radius, startDegree = 0, stopDegree = 360, stepDegree = 1, style = 1):
+def drawCircle(circleCenterX, circleCenterY, radius, startDegree = 0, stopDegree = 360, stepDegree = 1, style = 1):
     for degree in range (startDegree, stopDegree + 1, stepDegree):
         posX = int(round(math.cos(math.radians(degree)) * radius + circleCenterX))
         posY = int(round(math.sin(math.radians(degree)) * (- radius) + circleCenterY))
-        Plot (posX, posY, style)
+        plot (posX, posY, style)
         
 #==============================================================
 # New function.
 # Draws a line like a clock hand, where you enter the initial coordinate, the angle
 # in degrees and the radius (the size of the line)
-def DrawRadiusLine(fromX, fromY, degree, radius, style = 1):
+def drawRadiusLine(fromX, fromY, degree, radius, style = 1):
         targetX = int(round(math.cos(math.radians(degree)) * radius + fromX))
         targetY = int(round(math.sin(math.radians(degree)) * (- radius) + fromY))
-        DrawGenericLine(fromX, fromY, targetX, targetY, style)
+        drawGenericLine(fromX, fromY, targetX, targetY, style)
 
 #==============================================================
 # Uploading a two-color BMP image of a 128x64 point to a variable map []
 # CAUTION: Without any test for a correct BMP file format!
-def LoadBMP12864(imageRelativePath):
+def loadBMP12864(imageRelativePath):
     fileBMP = open(imageRelativePath, "rb")  # Load an image into a data variable []
     data = fileBMP.read()  
     fileBMP.close()                          # File closure
@@ -953,11 +976,11 @@ def LoadBMP12864(imageRelativePath):
             shift = 8
         else:
             shift = 0
-        Send2Bytes(0, 0b10000000 + posY, 0b10000000 + shift)  # Setting the graphics address
+        send2Bytes(0, 0b10000000 + posY, 0b10000000 + shift)  # Setting the graphics address
         for column in range (8):
             leftByte = (ord(data[byte]))
             rightByte = (ord(data[byte+1]))
-            Send2Bytes(1, leftByte, rightByte)     # 
+            send2Bytes(1, leftByte, rightByte)     # 
             mapa[column + shift , posY,0] = leftByte
             mapa[column+shift , posY,1] = rightByte
 
@@ -966,7 +989,7 @@ def LoadBMP12864(imageRelativePath):
 
 #==============================================================
 # 1-point display / deletion / inversion at posX coordinates (0 to 127) and posY (0 to 63)
-def Plot(posX, posY, style = 1):
+def plot(posX, posY, style = 1):
 
     # Checking for the correct range of coordinates and optionally adjusting them to the extreme values
     if (posX > 127): posX = 127
@@ -979,9 +1002,9 @@ def Plot(posX, posY, style = 1):
         posY -= 32
         horiz += 8
 
-    minibit = posX & 15 # Same as % 16
+    minibit = posX & 15 # Same as posX % 16 (my way looks CPU faster)
  
-    Send2Bytes (0, 0b10000000 + posY, 0b10000000 + horiz)  # Setting the graphics address
+    send2Bytes (0, 0b10000000 + posY, 0b10000000 + horiz)  # Setting the graphics address
 
     orignal_leva  = mapa[horiz, posY, 0]
     orignal_prava = mapa[horiz, posY, 1]
@@ -1006,7 +1029,7 @@ def Plot(posX, posY, style = 1):
 
         leftByte = orignal_leva
 
-    Send2Bytes(1, leftByte, rightByte)
+    send2Bytes(1, leftByte, rightByte)
     mapa[horiz, posY, 0] = leftByte
     mapa[horiz, posY, 1] = rightByte
 
@@ -1014,14 +1037,14 @@ def Plot(posX, posY, style = 1):
 
 #==============================================================
 # 1-pixel [display/deletion/inversion] at posX coordinates (0 to 127) and posY (0 to 63)
-def MemPlot(posX, posY, style = 1):
+def memPlot(posX, posY, style = 1):
     horiz = posX >> 4 # Same as / 16
     
     if (posY >= 32):
         posY -= 32
         horiz += 8
 
-    minibit = posX & 15
+    minibit = posX & 15    # Same as posX % 16 (my way looks CPU faster)
  
     orignal_leva  = mapa[horiz, posY, 0]
     orignal_prava = mapa[horiz, posY, 1]
@@ -1052,45 +1075,45 @@ def MemPlot(posX, posY, style = 1):
 
 #==============================================================
 # Overwrite the graphical memory (variable map []) to the display
-def MemDump():
+def memDump():
 
     for mikrorow in range(32):
-        Send2Bytes( 0, 0b10000000 + mikrorow , 0b10000000 )  # Setting the graphics address
+        send2Bytes( 0, 0b10000000 + mikrorow , 0b10000000 )  # Setting the graphics address
         for horizontal in range (16):
             leftByte  = mapa[horizontal , mikrorow , 0] 
             rightByte = mapa[horizontal , mikrorow , 1]
-            Send2Bytes( 1, leftByte, rightByte)    
+            send2Bytes( 1, leftByte, rightByte)    
              
              
 
 #==============================================================
 # Delete graphical display time
-def ClearGraphic(pattern = 0): 
-    InitGraphicMode()
-    SendByte(0, 0b00110110)  # function set (extend instruction set)
-    SendByte(0, 0b00110100)  # function set (graphic OFF) - aby nebylo videt postupne mazani displeje
-    SendByte(0, 0b00001000)  # displ.=OFF , cursor=OFF , blink=OFF
+def clearGraphic(pattern = 0): 
+    initGraphicMode()
+    sendByte(0, 0b00110110)  # function set (extend instruction set)
+    sendByte(0, 0b00110100)  # function set (graphic OFF) - aby nebylo videt postupne mazani displeje
+    sendByte(0, 0b00001000)  # displ.=OFF , cursor=OFF , blink=OFF
     
     for vertical in range(32):  
-        Send2Bytes(0, 0b10000000 + vertical, 0b10000000 )  # Setting the address on the display at the beginning of the micro-bar
+        send2Bytes(0, 0b10000000 + vertical, 0b10000000 )  # Setting the address on the display at the beginning of the micro-bar
         for horizontal in range (16):
-            Send2Bytes(1, pattern, pattern)     # Double-bits fill the entire display with the same code   
+            send2Bytes(1, pattern, pattern)     # Double-bits fill the entire display with the same code   
  
             # And this code still writes to individual positions in the cache
             mapa[horizontal, vertical, 0] = pattern    
             mapa[horizontal, vertical, 1] = pattern
             
-    SendByte( 0, 0b00110110)  # function set (graphic ON) - smazany displej se zobrazi okamzite
+    sendByte( 0, 0b00110110)  # function set (graphic ON) - smazany displej se zobrazi okamzite
 
 
 
 #==============================================================
 # Delete the text part of the display
-def ClearText(): 
-    SendByte(0, 0b00110000)  # function set (8 bit)
-    SendByte(0, 0b00110000)  # function set (basic instruction set)
-    SendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
-    SendByte(0, 0b00000001)  # clear
+def clearText(): 
+    sendByte(0, 0b00110000)  # function set (8 bit)
+    sendByte(0, 0b00110000)  # function set (basic instruction set)
+    sendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
+    sendByte(0, 0b00000001)  # clear
 
     # Erase the text memo
     txtmapa[0] = "                "
@@ -1103,73 +1126,91 @@ def ClearText():
 #==============================================================
 # Delete the graphical text and the text part of the display.
 # CAUTION: the display is set in the TEXT mode
-def ClearDisplay(pattern=0):
-    ClearGraphic(pattern)
-    ClearText()
+def clearDisplay(pattern=0):
+    clearGraphic(pattern)
+    clearText()
 
 
 
 #==============================================================
 # Set the display to the graphic mode
-def InitGraphicMode():  
-    SendByte(0, 0b00110010)  # function set (8 bit)
-    SendByte(0, 0b00110110)  # function set (extend instruction set)
-    SendByte(0, 0b00110110)  # function set (graphic ON)
-    SendByte(0, 0b00000010)  # nable CGRAM after being reset to BASIC instruction set
+def initGraphicMode():  
+    sendByte(0, 0b00110010)  # function set (8 bit)
+    sendByte(0, 0b00110110)  # function set (extend instruction set)
+    sendByte(0, 0b00110110)  # function set (graphic ON)
+    sendByte(0, 0b00000010)  # nable CGRAM after being reset to BASIC instruction set
 
 
 
 #==============================================================
 # Set the display to text mode
-def InitTextMode():  
-    SendByte(0, 0b00110000)  # function set (8 bit)
-    SendByte(0, 0b00110100)  # function set (extend instruction set)
-    SendByte(0, 0b00110110)  # function set (graphic OFF)
-    SendByte(0, 0b00000010)  # Enable CGRAM (after reset to BASIC instruction set)
-    SendByte(0, 0b00110000)  # function set (basic instruction set)
-    SendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
-    SendByte(0, 0b10000000)  # Address Counter na left horni roh
-
+def initTextMode():  
+    sendByte(0, 0b00110000)  # function set (8 bit)
+    sendByte(0, 0b00110100)  # function set (extend instruction set)
+    sendByte(0, 0b00110110)  # function set (graphic OFF)
+    sendByte(0, 0b00000010)  # Enable CGRAM (after reset to BASIC instruction set)
+    sendByte(0, 0b00110000)  # function set (basic instruction set)
+    sendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
+    sendByte(0, 0b10000000)  # Address Counter na left horni roh
 
 
 #==============================================================
 # Definition of a graphical shape of 4 icons with the size of 16x16 points
 # Icon = Number Icons 0 to 3
 # iconData = 16-byte double-byte value
-def DefineIcon(iconId, iconData):
-    InitTextMode()
-    SendByte(0, 64 + (iconId * 16) )  # Setting the graphics address
+def defineIcon(iconId, iconData):
+    initTextMode()
+    sendByte(0, 64 + (iconId * 16) )  # Setting the graphics address
     for dat in range(16):
         leftByte  = iconData[dat] / 256
         rightByte = iconData[dat] % 256
-        Send2Bytes(1, leftByte, rightByte)
+        send2Bytes(1, leftByte, rightByte)
 
 
 
 #==============================================================
-# Blink cursor after the last PrintCharGraphicMode entered in text mode
+# Blink cursor after the last printCharGraphicMode entered in text mode
 # Is designed for Chinese characters, so a 16x16-dot large square
 # (It's useless for European characters (8x16 points))
-def BlinkLastChineseChar(state):
-    InitTextMode()
-    if (state == True):
-        SendByte(0, 0b00001111)  # displ.=ON , cursor=ON , blink=ON
+def blinkLastChineseChar(state):
+    initTextMode()
+    if (state):
+        sendByte(0, 0b00001111)  # displ.=ON , cursor=ON , blink=ON
     else:
-        SendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
+        sendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
 
+#==============================================================
+# Hide all active pixels on display, but doesn't remove them from memory.
+# If you hide them (True or any value except 0), and then show them again (False or 0),
+# all active pixels will show again, on the same place.
+# I was trying to make a function to turn off the light from the display,
+# but doesn't look possible.
+def hideShowDisplay(state):
+    initTextMode()
+    if (state):
+        sendByte(0, 0b00001100)  # displ.=ON , cursor=OFF , blink=OFF
+    else:
+        sendByte(0, 0b00001000)  # displ.=OFF , cursor=OFF , blink=OFF
 
-
+#==============================================================
+# A weird command. It's like the hideShowDisplay(), but idk right
+# what it does.
+def standby():
+    sendByte(0, 0b00110000)  # function set (8 bit)
+    sendByte(0, 0b00110100)  # function set (extend instruction set)
+    sendByte(0, 0b00000001)  # Standby command
+    
 #==============================================================
 # Set the position to the appropriate column (0 to 7) and the row (0 to 3)
 # For big characters and Icons (16x16 points)
-def SetIconPos(column, row): 
+def setIconPos(column, row): 
 
     shift = column
     if (row == 1): shift = column + 16
     if (row == 2): shift = column + 8
     if (row == 3): shift = column + 24
 
-    SendByte(0, 0b10000000 + shift)  # Address Counter to the desired position
+    sendByte(0, 0b10000000 + shift)  # Address Counter to the desired position
 
 
 
@@ -1188,23 +1229,26 @@ def setDataPin(bit):
 # A short one-clock pulse on serialized communications
 # I was able to run changing the time.sleep() values, but rarely I was getting some
 # artifacts on display, so I decided to leave them there.
-# Before Strobe4 and 5, this library was using a "for x in range (4): Strobe()"
+# Before strobe4 and 5, this library was using a "for x in range (4): strobe()"
 # It was called so many times that it was taking a considerably amount of time
 # Now the code runs a little faster.
 # Using this quickSleep instead of time.sleep(0.0...1) made a 3.5s code run in 2.7s.
 # If there are artifacts in screen, add another y to the expression.
 # Leaving the last quickSleep() commented is working, but uncomment if needed.
 def quickSleep():
-    y = 1
-    x = y + y + y + y + y + y + y + y + y + y + y
+    time.sleep(0)
+    # Using the lines below we can achieve a higher speed, but is a lot more cpu consuming.
+    # I need to find a way to sleep faster (time.sleep isn't fast enough)
+    # y = 1.1
+    # x = y + y + y + y + y + y + y + y + y + y + y + y + y + y + y + y + y
     
-def Strobe():
+def strobe():
     GPIO.output(sClk_Pin, True)
     quickSleep()
     GPIO.output(sClk_Pin, False)
     #quickSleep()
 
-def Strobe4():
+def strobe4():
     GPIO.output(sClk_Pin, True)
     quickSleep()
     GPIO.output(sClk_Pin, False)
@@ -1222,7 +1266,7 @@ def Strobe4():
     GPIO.output(sClk_Pin, False)
     #quickSleep()
   
-def Strobe5():
+def strobe5():
     GPIO.output(sClk_Pin, True)
     quickSleep()
     GPIO.output(sClk_Pin, False)
@@ -1246,84 +1290,84 @@ def Strobe5():
   
 #==============================================================
 # Subprogram for sending two bytes after serial communication without interrupting between individual bytes
-def Send2Bytes(rs, byte1, byte2):
+def send2Bytes(rs, byte1, byte2):
         
     setDataPin(1)                # The beginning of the communication is done with the "synchro" sequence of 5 singles
-    Strobe5()
+    strobe5()
     
     setDataPin(0)                # Then the RW bit is sent (when set to "0")
-    Strobe()
+    strobe()
     setDataPin(rs)               # Then the RS bit is sent (commands = "0"; data = "1")
-    Strobe()
+    strobe()
     setDataPin(0)                # Followed by zero bit
-    Strobe()
+    strobe()
  
     # Decomposing these next for loops didn't made the code run significantly faster.
     for i in range(7, 3, -1):         # And then top four bits from the first byte
         setDataPin(byte1 & (1 << i))    # The original code used "bit = (byte1 & (2**i)) >> i"
-        Strobe()                        # I removed the "bit" var (putted the expression directly at the function)
+        strobe()                        # I removed the "bit" var (putted the expression directly at the function)
                                                                         # And changed the expression. Well, thess improvements made code runs faster.
 
     setDataPin(0)                     # The next is the 4x "0"
-    Strobe4()
+    strobe4()
 
     for i in range(3, -1, -1):    
         setDataPin(byte1 & (1 << i))
-        Strobe()
+        strobe()
 
     setDataPin(0)                      # Then the separation sequence is again 4x "0"
-    Strobe4()
+    strobe4()
 
     # Byte types were sent immediately without "head" (without 5x "1" + RW bit + RS bit + "0")
     for i in range(7, 3, -1):        # Even this kind of byte is divided into 2 parts (upper 4 bits)
         setDataPin(byte2 & (1 << i))
-        Strobe()
+        strobe()
 
     setDataPin(0)                        # Separation sequence 4x "0"
-    Strobe4()
+    strobe4()
 
     for i in range(3, -1, -1):       # Bottom 4 bits
         setDataPin(byte2 & (1 << i))
-        Strobe()
+        strobe()
 
     setDataPin(0)                        # Last separating sequence 4x "0"
-    Strobe4()
+    strobe4()
 
 
 
 #==============================================================
 # Send one byte after serial communication
-def SendByte(rs,  byte):
+def sendByte(rs,  byte):
 
     setDataPin(1)                # the beginning of the communication is done with the "synchro" sequence of 5 singles
-    Strobe5()
+    strobe5()
     
     setDataPin(0)                    # Then the RW bit is sent (when set to "0")        
-    Strobe()                                                                                  
+    strobe()                                                                                  
     setDataPin(rs)                    # Then send the RS bit (commands = "0"; data = "1")            
-    Strobe()                                                                                                                                           
+    strobe()                                                                                                                                           
     setDataPin(0)                     # Followed by zero bit                                                        
-    Strobe()
+    strobe()
     
     for i in range(7, 3, -1):     # And then up four bits of the sent byte
         setDataPin(byte & (1 << i))
-        Strobe()
+        strobe()
 
     setDataPin(0)                     # Then the separation sequence is sent 4x "0"
-    Strobe4()
+    strobe4()
 
     for i in range(3, -1, -1):    # Followed by the rest of the data (the bottom 4 bits of the sent byte)
         setDataPin(byte & (1 << i))
-        Strobe()
+        strobe()
 
     setDataPin(0)                      # To restart the separation sequence 4x "0"
-    Strobe4()
+    strobe4()
 
 
 
 #==============================================================
 # HW initial setting + reset the display
-def Init():
+def init():
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(sData_Pin, GPIO.OUT)    # (pin 26 = GPIO7)   = DATA
@@ -1335,6 +1379,7 @@ def Init():
     GPIO.output(reset_Pin, False)      # RESET to "0"
     time.sleep(0.1)   
     GPIO.output(reset_Pin, True)       # RESET to "1"
+    loadTextFont("font2.txt")  # Retrieve an external font from the file
 
 
 #==============================================================
