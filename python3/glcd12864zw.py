@@ -715,10 +715,10 @@ def main():
     # Example: 4 points thick sikma line over the entire screen
 
     for x in range(128):
-        plot(x ,x/2     , 1)
-        plot(x,(x/2) + 1, 1)
-        plot(x,(x/2) + 2, 1)
-        plot(x,(x/2) + 3, 1)
+        plot(x ,x//2     , 1)
+        plot(x,(x//2) + 1, 1)
+        plot(x,(x//2) + 2, 1)
+        plot(x,(x//2) + 3, 1)
 
     time.sleep(2)
     printStringGraphicMode("Delete graphics", 0, 56, True)   
@@ -731,10 +731,10 @@ def main():
     printStringGraphicMode("Make a line ", 0, 56, True)   
 
     for x in range(128):
-        plot(127-x ,x/2     , 1)
-        plot(127-x,(x/2) + 1, 1)
-        plot(127-x,(x/2) + 2, 1)
-        plot(127-x,(x/2) + 3, 1)
+        plot(127-x ,x//2     , 1)
+        plot(127-x,(x//2) + 1, 1)
+        plot(127-x,(x//2) + 2, 1)
+        plot(127-x,(x//2) + 3, 1)
 
     time.sleep(2)
     printStringGraphicMode(" Delete text ", 0, 56, True)   
@@ -869,7 +869,7 @@ def printCharGraphicMode(ascii8bitCode, bytePosX, posY , invert = False):
     for adr_font in range(ascii8bitCode * 8, (ascii8bitCode * 8) + 8):
 
         # Calculate the horizontal and vertical addresses in the display memory
-        horiz = posX / 16
+        horiz = posX // 16 
         dis_adr_y = posY
         if (dis_adr_y >= 32):
             dis_adr_y = dis_adr_y - 32
@@ -911,8 +911,8 @@ def printCharGraphicMode(ascii8bitCode, bytePosX, posY , invert = False):
 # bytePosX = the position of the first printCharGraphicMode in the text is in column 0 to 15; posY = 0 to 63 (upper margin of the printCharGraphicMode)
 def printStringGraphicMode(string, bytePosX, posY, invert = False):  
 
-    if (isinstance(string, unicode) == False):   # If the string is not in unicode, then transfer it
-        string = unicode(string, "utf-8")          # Convert string from UTF-8 to unicode
+    if (isinstance(string, str) == False):   # If the string is not in unicode, then transfer it
+        string = str(string, "utf-8")          # Convert string from UTF-8 to unicode
 
     # All the string scroll printCharGraphicMode after printCharGraphicMode and print
     for letter in range (len(string)):
@@ -1221,7 +1221,7 @@ def loadBMP12864(imageRelativePath):
     # The detailed BMP master file specification is here:
     # http://www.root.cz/clanky/graficky-format-bmp-pouzivany-a-pritom-neoblibeny
     # The start of the image data determines 4 bytes in a file in positions 10 to 13 (ten) from the beginning of the file
-    zacatekdat = ord(data[10]) + (ord(data[11]) * 256) + (ord(data[12]) * 65536) + (ord(data[13]) * 16777216)
+    zacatekdat = data[10] + (data[11] * 256) + (data[12] * 65536) + (data[13] * 16777216)
     byte = zacatekdat
 
     for mikrorow in range (63, -1, -1):  # Read data variables [] byte after byte and store in memory (map [])
@@ -1233,8 +1233,8 @@ def loadBMP12864(imageRelativePath):
             shift = 0
         send2Bytes(0, 0b10000000 + posY, 0b10000000 + shift)  # Setting the graphics address
         for column in range (8):
-            leftByte = (ord(data[byte]))
-            rightByte = (ord(data[byte+1]))
+            leftByte = data[byte]
+            rightByte = data[byte+1]
             send2Bytes(1, leftByte, rightByte)     # 
             mapa[column + shift , posY,0] = leftByte
             mapa[column+shift , posY,1] = rightByte
@@ -1254,7 +1254,7 @@ def plot(posX, posY, style = 1):
     elif (posY < 0  ): posY = 0
 
 
-    horiz = posX / 16 # Same as / 16
+    horiz = posX // 16 # Same as / 16
     if (posY >= 32):
         posY -= 32
         horiz += 8
@@ -1299,11 +1299,6 @@ def plot(posX, posY, style = 1):
 # 1-pixel [display/deletion/inversion] at posX coordinates (0 to 127) and posY (0 to 63)
 def memPlot(posX, posY, style = 1):
     horiz = posX >> 4 # Same as / 16
-    
-    if (posX > 127): posX = 127
-    elif (posX < 0  ): posX = 0
-    if (posY > 63 ): posY = 63
-    elif (posY < 0  ): posY = 0
     
     if (posY >= 32):
         posY -= 32
@@ -1433,7 +1428,7 @@ def defineIcon(iconId, iconData):
     initTextMode()
     sendByte(0, 64 + (iconId * 16) )  # Setting the graphics address
     for dat in range(16):
-        leftByte  = iconData[dat] / 256
+        leftByte  = iconData[dat] // 256
         rightByte = iconData[dat] % 256
         send2Bytes(1, leftByte, rightByte)
 

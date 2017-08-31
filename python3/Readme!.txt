@@ -1,0 +1,1 @@
+NOTE: The python3 version is slower. Python3 is slower. Only use if you need it.
