@@ -21,7 +21,7 @@ So, I did my best to translate it and improve its performance and add a few func
 
 The library is working, most is in english, and almost everything you can understand.
 
-The first part of the code, as the original code, is a demonstration of its working. Then, are the functions you can use.
+The first part of the code, as the original code, is a demonstration of its working. Then are the functions you can use.
 
 There is also a python3 version of the library that I ported, but as I tested in August of 2017, it was something like 25~30% slower than the python2 version. This surely doesn't apply anymore (2020+).
 
@@ -30,17 +30,15 @@ There is also a python3 version of the library that I ported, but as I tested in
 
 #### drawGenericLine
 
-The original code only had drawHorizontal and vertical lines, so I coded this, a function that draw from a coord to another.
+The original code only had drawHorizontal and vertical lines, so I added this, that draws from a coord to another.
 
 #### drawCircle
 
-Yeap, it draws a circle.
+Draws a circle!
 
 #### drawRadiusLine
 
-Draws a line like a clock hand, where you enter the initial coordinate, the angle
-
-in degrees and the radius (the size of the line)
+Draws a line like a clock hand, where you enter the initial coordinate, the angle in degrees and the radius (the size of the line)
 
 #### printString3x5
 
@@ -52,14 +50,10 @@ So I coded this function, which prints small chars, 3x5 pixels each.
 
 
 
-### Feel free to do a Pull Request!
-
-
-
 # CREDITS:
 
 Translation and improvements by Henrique Bruno Fantauzzi de Almeida (it's-a me!) - Federal University of Rio de Janeiro - Brazil
 
-The credits for the original code goes to the author. Thanks, Milan Krúpa (czech guy)!
+The credits for the original code goes to the author. Thanks, Milan Krúpa!
 
 
